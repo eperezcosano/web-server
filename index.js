@@ -14,7 +14,8 @@ const key = fs.readFileSync('./certs/localhost.decrypted.key')
 const cert = fs.readFileSync('./certs/localhost.crt')
 
 const app = express()
-const server = https.createServer({key, cert}, app)
+//const server = https.createServer({key, cert}, app)
+const server = require('http').createServer(app)
 const router = require('./routes/index')
 
 app.set('view engine', 'njk')
