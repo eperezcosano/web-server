@@ -164,8 +164,7 @@ function registerUser(req, res) {
                     return res.status(500).render('index', { alert: { type: 'warning', msg: 'Database error. Please try again later...'} })
                 } else {
                     let token = generateJWT(doc._id, doc.email, doc.uname)
-                    console.log('token', token)
-                    res.cookie("token", token, { maxAge: jwtSeconds * 1000 })
+                    res.cookie('token', token, { maxAge: jwtSeconds * 1000, httpOnly: true, secure: true})
                     return res.redirect('/')
                 }
             })
@@ -203,7 +202,7 @@ function loginUser(req, res) {
         if (digest === hash(pass, salt)) {
             let token = generateJWT(doc._id, doc.email, doc.uname)
             console.log('token', token)
-            res.cookie("token", token, { maxAge: jwtSeconds * 1000 })
+            res.cookie('token', token, { maxAge: jwtSeconds * 1000, httpOnly: true, secure: true})
             return res.redirect('/')
         } else {
             return res.status(401).render('index', {login: {email}, alert: {type: 'error', msg: 'Incorrect password.'}})

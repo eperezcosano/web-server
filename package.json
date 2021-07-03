@@ -13,6 +13,7 @@
     "express": "^4.17.1",
     "express-hcaptcha": "^0.0.3",
     "express-validator": "^6.12.0",
+    "greenlock-express": "^4.0.3",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.13.0",
     "nunjucks": "^3.2.3"
