@@ -10,6 +10,14 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    ip: {
+        type: String,
+        required: true
+    },
+    rol: {
+        type: String,
+        default: 'Member'
+    },
     digest: {
         type: String,
         required: true
@@ -18,6 +26,8 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     }
-})
+},
+    { timestamps: true }
+)
 
 module.exports = mongoose.model('User', userSchema)

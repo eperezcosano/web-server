@@ -107,6 +107,10 @@
                 </div>
             </div>
         </div>
+        {# hCaptcha #}
+        <div class="mb-3 row">
+            <div class="h-captcha" data-sitekey="6b5f6291-e12d-4149-a768-fc300e56b8de" data-theme="dark"></div>
+        </div>
         {# Buttons #}
         <div class="mb-3 row">
             <div>
@@ -118,7 +122,7 @@
 {% endmacro %}
 
 {# Login #}
-{% macro login(email, errors) %}
+{% macro login(email, hcaptcha, errors) %}
     <form action="/login" method="post" class="row g-3 needs-validation" novalidate>
         {# Email #}
         <div class="mb-3 row">
@@ -140,6 +144,12 @@
                 </div>
             </div>
         </div>
+        {% if hcaptcha %}
+        {# hCaptcha #}
+        <div class="mb-3 row">
+            <div class="h-captcha" data-sitekey="6b5f6291-e12d-4149-a768-fc300e56b8de" data-theme="dark"></div>
+        </div>
+        {% endif %}
         {# Buttons #}
         <div class="mb-3 row">
             <div>

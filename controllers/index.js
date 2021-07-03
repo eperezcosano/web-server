@@ -1,5 +1,5 @@
 require('../models/user')
-//require('../models/invitation')
+require('../models/invitation')
 const crypto = require('crypto')
 const mongoose = require("mongoose")
 const User = mongoose.model('User')
@@ -7,7 +7,8 @@ const path = require('path')
 const fs = require('fs')
 const jwt = require('jsonwebtoken')
 const jwtSeconds = 900
-//const Invitation = mongoose.model('Invitation')
+const Invitation = mongoose.model('Invitation')
+
 
 function getIndexPage(req, res) {
     res.render('index')
@@ -92,10 +93,20 @@ function identifyUser(req, res) {
         if (err) {
             return res.status(500).render('index', { alert: { type: 'warning', msg: 'Database error. Please try again later...'} })
         } else if (user) {
+            //TODO: Login attempts for captcha
+            //TODO: IPs missmatch captcha
             return res.render('index', { login: {email: email}, alert: { type: 'info', msg: 'Welcome back! Please, enter your credentials below.'} })
         }
-        //Invitation.countDocuments({"email"})
-        return res.render('index', { register: {email: email}, alert: { type: 'info', msg: 'Welcome! Fill out the form below.'} })
+        //TODO: Account activation
+        Invitation.countDocuments({"email": email}, (err, count) => {
+            if (err) {
+                return res.status(500).render('index', { alert: { type: 'warning', msg: 'Database error. Please try again later...'} })
+            } else if (count > 0) {
+                return res.render('index', { register: {email: email}, alert: { type: 'info', msg: 'Welcome! Fill out the form below.'} })
+            } else {
+                return res.render('index', { alert: { type: 'error', msg: 'To access you need an invitation.'} })
+            }
+        })
     })
 }
 
@@ -114,10 +125,17 @@ function registerUser(req, res) {
     const uname = req.body.uname
     const pass = req.body.pass
     const cpass = req.body.cpass
+    const hcaptcha = req.hcaptcha
 
     // Check if passwords match
     if (pass !== cpass) {
         return res.status(400).render('index', {register: {email}, alert: {type: 'error', msg: 'Passwords do not match.'}})
+    }
+
+    console.log(hcaptcha)
+    // Validate hCaptcha
+    if (!hcaptcha.success) {
+        return res.status(400).render('index', {register: {email}, alert: {type: 'error', msg: 'You are a robot!'}})
     }
 
     // Find if exists a User with that email

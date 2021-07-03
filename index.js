@@ -1,5 +1,5 @@
 /*
-* TODO: Email, invitations, certbot, captcha, attempts, webtorrent
+* TODO: Email, invitations, certbot, attempts, webtorrent
 * */
 const express = require('express')
 const https = require('https')
@@ -8,7 +8,7 @@ const nunjucks = require('nunjucks')
 const mongoose = require('mongoose')
 const cookieParser = require('cookie-parser')
 
-const port = 3433
+const port = 80
 const MONGO_URI = 'mongodb://localhost/web-server';
 const key = fs.readFileSync('./certs/localhost.decrypted.key')
 const cert = fs.readFileSync('./certs/localhost.crt')
@@ -18,6 +18,7 @@ const server = https.createServer({key, cert}, app)
 const router = require('./routes/index')
 
 app.set('view engine', 'njk')
+app.set('trust proxy', true)
 nunjucks.configure('views', {autoescape: true, express: app})
 app.use(cookieParser())
 app.use(express.json())
