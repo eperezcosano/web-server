@@ -1,22 +1,15 @@
 /*
-* TODO: Email, invitations, certbot, attempts, webtorrent
+* TODO: Email, invitations, attempts, webtorrent
 * */
 const express = require('express')
 const greenlock = require('greenlock-express')
-//onst https = require('https')
-const fs = require('fs')
 const nunjucks = require('nunjucks')
 const mongoose = require('mongoose')
 const cookieParser = require('cookie-parser')
 
-const port = 80
 const MONGO_URI = 'mongodb://localhost/web-server';
-const key = fs.readFileSync('./certs/localhost.decrypted.key')
-const cert = fs.readFileSync('./certs/localhost.crt')
 
 const app = express()
-//const server = https.createServer({key, cert}, app)
-//const server = require('http').createServer(app)
 const router = require('./routes/index')
 
 app.set('view engine', 'njk')
@@ -28,7 +21,6 @@ app.use(express.urlencoded({ extended: false }))
 app.use(express.static('public'))
 app.use('/', router)
 
-/*
 mongoose.connect(MONGO_URI,
     {
         useNewUrlParser: true,
@@ -41,7 +33,7 @@ mongoose.connect(MONGO_URI,
     console.error('Connection to DB Failed');
     console.error(error.message);
     process.exit(-1);
-})*/
+})
 
 greenlock.init({
     packageRoot: __dirname,
@@ -51,9 +43,4 @@ greenlock.init({
     cluster: false
 }).serve(app)
 
-/*
-server.listen(port, () => {
-    console.log('Listening on https://localhost:' + port)
-})
-*/
 
