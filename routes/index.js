@@ -2,11 +2,8 @@ const router = require('express').Router()
 const indexController = require('../controllers/index')
 const validator = require('../middlewares/validator')
 const auth = require('../middlewares/auth')
+const hcaptcha = require('../middlewares/hcaptcha')
 const { body, param } = require('express-validator')
-const hcaptcha = require('express-hcaptcha')
-const cors = require('cors')
-const corsOpts = {origin: 'https://hcaptcha.com/siteverify'}
-const siteSecret = '0xDa2C1F0c71116Fc349B668C893d4B7dA1370F307'
 
 router.get('/', auth.verifyToken, indexController.getIndexPage)
 router.post('/',
@@ -48,8 +45,7 @@ router.post(
             .withMessage('Password is weak.')
     ],
     validator.index,
-    //cors(corsOpts),
-    //hcaptcha.middleware.validate(siteSecret),
+    hcaptcha.verify,
     indexController.registerUser
 )
 router.get('/login', indexController.getLoginPage)

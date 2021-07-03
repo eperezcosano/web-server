@@ -134,8 +134,6 @@ function registerUser(req, res) {
         return res.status(400).render('index', {register: {email}, alert: {type: 'error', msg: 'Passwords do not match.'}})
     }
 
-    console.log(hcaptcha)
-    // Validate hCaptcha
     if (!hcaptcha.success) {
         return res.status(400).render('index', {register: {email}, alert: {type: 'error', msg: 'You are a robot!'}})
     }
