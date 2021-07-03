@@ -48,8 +48,8 @@ router.post(
             .withMessage('Password is weak.')
     ],
     validator.index,
-    cors(corsOpts),
-    hcaptcha.middleware.validate(siteSecret),
+    //cors(corsOpts),
+    //hcaptcha.middleware.validate(siteSecret),
     indexController.registerUser
 )
 router.get('/login', indexController.getLoginPage)

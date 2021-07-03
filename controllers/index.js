@@ -120,6 +120,8 @@ function identifyUser(req, res) {
  */
 function registerUser(req, res) {
 
+    return res.json(req.body)
+
     // Collect all User data from the body JSON
     const email = req.body.email
     const uname = req.body.uname
