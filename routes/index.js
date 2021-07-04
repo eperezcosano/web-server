@@ -40,9 +40,9 @@ router.post(
             .withMessage('Username must only contain letters and numbers.')
             .isLength({ min: 3, max: 30 })
             .withMessage('Invalid username length.'),
-        body('pass')
+        /*body('pass')
             .isStrongPassword()
-            .withMessage('Password is weak.')
+            .withMessage('Password is weak.')*/
     ],
     validator.index,
     hcaptcha.verify,

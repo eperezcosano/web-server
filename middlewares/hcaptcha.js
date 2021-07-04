@@ -3,6 +3,7 @@ const querystring = require('querystring')
 
 function verify(req, res, next) {
     if (!req.body || !req.body.h-captcha-response) {
+        console.log('No body')
         return next()
     }
     const token = req.body.h-captcha-response
@@ -22,9 +23,10 @@ function verify(req, res, next) {
         response.setEncoding('utf8')
         let buffer = ''
         response
-            .on('error', () => next())
+            .on('error', () => { console.log('Req error'); next()})
             .on('data', (chunk) => buffer += chunk)
             .on('end', () => {
+                console.log('End')
                 req.hcaptcha = JSON.parse(buffer)
                 next()
             })
@@ -32,7 +34,7 @@ function verify(req, res, next) {
             process.stdout.write(d)
         })
     })
-    request.on('error', next())
+    request.on('error', () => { console.log('Req error'); next()})
     request.write(data)
     request.end()
 }
