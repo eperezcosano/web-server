@@ -2,10 +2,12 @@ const https = require('https')
 const querystring = require('querystring')
 
 function verify(req, res, next) {
+    return res.json(req.body)
+    /*
     if (!req.body || !req.body.h-captcha-response) {
         console.log('No body')
         return next()
-    }
+    }*/
     const token = req.body.h-captcha-response
     const secret = '0xDa2C1F0c71116Fc349B668C893d4B7dA1370F307'
     const data = querystring.stringify({secret, response: token})
