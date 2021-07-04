@@ -2,13 +2,12 @@ const https = require('https')
 const querystring = require('querystring')
 
 function verify(req, res, next) {
-    return res.json(req.body)
-    /*
-    if (!req.body || !req.body.h-captcha-response) {
+    if (!req.body || !req.body['h-captcha-response']) {
         console.log('No body')
+        req.hcaptcha = false
         return next()
-    }*/
-    const token = req.body.h-captcha-response
+    }
+    const token = req.body['h-captcha-response']
     const secret = '0xDa2C1F0c71116Fc349B668C893d4B7dA1370F307'
     const data = querystring.stringify({secret, response: token})
     const options = {
@@ -25,18 +24,26 @@ function verify(req, res, next) {
         response.setEncoding('utf8')
         let buffer = ''
         response
-            .on('error', () => { console.log('Req error'); next()})
+            .on('error', () => {
+                console.log('Req error')
+                req.hcaptcha = false
+                return next()
+            })
             .on('data', (chunk) => buffer += chunk)
             .on('end', () => {
-                console.log('End')
-                req.hcaptcha = JSON.parse(buffer)
-                next()
+                console.log(JSON.parse(buffer))
+                req.hcaptcha = JSON.parse(buffer).success
+                return next()
             })
         res.on('data', d => {
             process.stdout.write(d)
         })
     })
-    request.on('error', () => { console.log('Req error'); next()})
+    request.on('error', () => {
+        console.log('Req error')
+        req.hcaptcha = false
+        return next()
+    })
     request.write(data)
     request.end()
 }

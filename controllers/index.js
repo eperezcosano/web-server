@@ -120,8 +120,6 @@ function identifyUser(req, res) {
  */
 function registerUser(req, res) {
 
-    return res.json(req.body)
-
     // Collect all User data from the body JSON
     const email = req.body.email
     const uname = req.body.uname
@@ -134,7 +132,7 @@ function registerUser(req, res) {
         return res.status(400).render('index', {register: {email}, alert: {type: 'error', msg: 'Passwords do not match.'}})
     }
 
-    if (!hcaptcha.success) {
+    if (!hcaptcha) {
         return res.status(400).render('index', {register: {email}, alert: {type: 'error', msg: 'You are a robot!'}})
     }
 
