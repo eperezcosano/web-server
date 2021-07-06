@@ -5,6 +5,8 @@ require('../models/invitation')
 const Invitation = mongoose.model('Invitation')
 require('../models/activation')
 const Activation = mongoose.model('Activation')
+require('../models/login_attempt')
+const LoginAttempt = mongoose.model('LoginAttempt')
 const crypto = require('crypto')
 const path = require('path')
 const fs = require('fs')
@@ -202,56 +204,55 @@ async function registerUser(req, res) {
  * @json req.body: {email:string, pass: string}
  * @returns 200, 401 or 404
  */
-function loginUser(req, res) {
+async function loginUser(req, res) {
+    try {
+        // Collect the credentials from the body JSON
+        const email = req.body.email
+        const pass = req.body.pass
 
-    // Collect the credentials from the body JSON
-    let email = req.body.email;
-    let pass = req.body.pass;
-
-    // Find the User
-    User.findOne({"email": email}, {}, {}, (err, doc) => {
-        if (err) {
-            return res.status(500).render('index', { alert: { type: 'warning', msg: 'Database error. Please try again later...'} })
-        } else if (!doc) {
+        // Find the User
+        const user = await User.findOne({"email": email})
+        if (!user) {
+            // User not found
             return res.status(401).render('index', {login: {email}, alert: {type: 'error', msg: 'Incorrect password.'}})
-        } else if (!doc.activation) {
-            Activation.findOne({"email": email} , {}, {}, (err, doc) => {
-                if (err || !doc) {
-                    return res.status(500).render('index', { alert: { type: 'warning', msg: 'Database error. Please try again later...'} })
-                } else if (req.body.code !== doc.code) {
-                    return res.status(400).render('index', {login: {email}, alert: {type: 'error', msg: 'Incorrect code.'}})
-                }
-                //TODO: check expiration 86400ms
-                /*} else if ()*/
-                Activation.deleteMany({"email": email}, {}, (err) => {
-                    if (err) {
-                        return res.status(500).render('index', { alert: { type: 'warning', msg: 'Database error. Please try again later...'} })
-                    }
-                    User.updateOne({"email": email}, {"activation": true}, {}, (err, res) => {
-                        if (err) {
-                            return res.status(500).render('index', { alert: { type: 'warning', msg: 'Database error. Please try again later...'} })
-                        }
-
-                    })
-                })
-            })
         }
+        if (!user.activation) {
+            // User not activated
+            const activation = await Activation.findOne({"email": email})
+            if (req.body.code !== activation.code) {
+                // Incorrect code
+                return res.status(400).render('index', {login: {email}, alert: {type: 'error', msg: 'Incorrect code.'}})
+            }
 
-        // Collect its digest and salt from database
-        let digest = doc.digest
-        let salt = doc.salt
+            // TODO: check expiration 86400ms
+            // Delete activation
+            await Activation.deleteMany({"email": email})
 
-        // Make a hash with the provided password and compare
-        if (digest === hash(pass, salt)) {
-            let token = generateJWT(doc._id, doc.email, doc.uname)
-            console.log('token', token)
-            res.cookie('token', token, { maxAge: jwtSeconds * 1000, httpOnly: true, secure: true})
-            return res.redirect('/')
+            // Update User to activated
+            await User.updateOne({"email": email}, {"activation": true})
+
         } else {
-            return res.status(401).render('index', {login: {email}, alert: {type: 'error', msg: 'Incorrect password.'}})
+            // User is activated
+
+            // Collect its digest and salt from database
+            const digest = user.digest
+            const salt = user.salt
+
+            // Make a hash with the provided password and compare
+            if (digest === hash(pass, salt)) {
+                const token = generateJWT(user._id, user.email, user.uname)
+                res.cookie('token', token, { maxAge: jwtSeconds * 1000, httpOnly: true, secure: true})
+                return res.redirect('/')
+            } else {
+                return res.status(401).render('index', {login: {email}, alert: {type: 'error', msg: 'Incorrect password.'}})
+            }
         }
 
-    })
+    } catch (err) {
+        // Database error
+        console.error(err)
+        return res.status(500).render('index', { alert: { type: 'warning', msg: 'Database error. Please try again later...'} })
+    }
 }
 
 module.exports = {
