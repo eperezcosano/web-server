@@ -168,13 +168,9 @@ async function registerUser(req, res) {
             salt: salt
         })
 
-        // Save it in the database
-        await user.save()
-
         // Create code activation
         const code = generateSalt()
         const activation = new Activation({email, code})
-        await activation.save()
 
         // Send email
         const mailOptions = {
@@ -183,15 +179,21 @@ async function registerUser(req, res) {
             subject: 'Welcome to Lufo',
             text: 'Your activation code is: ' + code
         }
-        await transporter.sendMail(mailOptions, function(error, info){
+        const logs = await transporter.sendMail(mailOptions)
+        console.log(logs)
+            /*
+            , function(error, info){
             if (error) {
                 console.log(error)
                 return res.status(500).render('index', { alert: { type: 'warning', msg: 'Email server error. Please try again later...'} })
             } else {
                 console.log(info)
+                // Save it in the database
+                await user.save()
+                await activation.save()
                 return res.render('index', {alert: {type: 'success', msg: 'Check your inbox to confirm registration.'}})
             }
-        })
+        })*/
     } catch (err) {
         // Database error
         console.error(err)
