@@ -93,7 +93,7 @@ async function identifyUser(req, res) {
             }
 
             // Get last 3 login attempts
-            const attempts = await LoginAttempt.find({"user_id": user.id}).sort({created_at: -1}).limit(3)
+            const attempts = await LoginAttempt.find({"user_id": user.id}).sort({createdAt: -1}).limit(3)
             if (attempts.length === 3 && attempts.every((attempt) => !attempt.success)) {
                 // All 3 attempts failed, hCaptcha required
                 return res.render('index', { login: {email: email, hcaptcha: true} })
@@ -176,7 +176,7 @@ async function registerUser(req, res) {
         const user = new User({
             email: email,
             uname: uname,
-            rol: null,
+            rol: 'Member',
             ip: req.ip,
             activation: false,
             digest: digest,
@@ -233,9 +233,8 @@ async function loginUser(req, res) {
         }
         if (!user.activation) {
             // User not activated
-            const activation = await Activation.findOne({"email": email}).sort({created_at: -1})
+            const activation = await Activation.findOne({"email": email}).sort({createdAt: -1})
             if (pass !== activation.code) {
-                console.log(pass, activation.code)
                 // Incorrect code
                 // TODO: check attempts
                 return res.status(400).render('index', {login: {email, activation: true}, alert: {type: 'error', msg: 'Incorrect code.'}})
@@ -252,10 +251,10 @@ async function loginUser(req, res) {
             // User is activated
 
             // Get last 3 login attempts and check last IP match
-            const attempts = await LoginAttempt.find({"user_id": user.id}).sort({created_at: -1}).limit(3)
+            const attempts = await LoginAttempt.find({"user_id": user.id}).sort({createdAt: -1}).limit(3)
             if ((attempts.length === 3 && attempts.every((attempt) => !attempt.success)) || req.ip !== user.ip) {
                 if (!req.body.hcaptcha) {
-                    return res.status(400).render('index', {login: {email}, alert: {type: 'error', msg: 'You are a robot!'}})
+                    return res.status(400).render('index', {login: {email, hcaptcha: true}, alert: {type: 'error', msg: 'You are a robot!'}})
                 }
             }
 
