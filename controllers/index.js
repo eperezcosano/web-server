@@ -84,34 +84,38 @@ function generateJWT(id, email, uname) {
  * @json req.body: {email: string}
  * @returns 200, 404, 500
  */
-function identifyUser(req, res) {
+async function identifyUser(req, res) {
+    try {
+        // Collect the email from the body JSON
+        const email = req.body.email
 
-    // Collect the email from the body JSON
-    const email = req.body.email
+        // Find if exists with that email
+        const user = await User.findOne({"email": email}, {"email": 1})
 
-    // Find if exists with that email
-    User.findOne({"email": email}, {"email": 1}, {},(err, user) => {
-        if (err || !user) {
-            return res.status(500).render('index', { alert: { type: 'warning', msg: 'Database error. Please try again later...'} })
-        } else if (user) {
+        if (user) {
+            // User registered
             //TODO: IPs missmatch captcha
             console.log('current IP', req.ip, "db IP", user.ip)
             //TODO: Account activation
             console.log('Activation', user.activation)
             //TODO: collect lasts attempts if captcha
             return res.render('index', { login: {email: email}, alert: { type: 'info', msg: 'Welcome back! Please, enter your credentials below.'} })
-        }
-
-        Invitation.countDocuments({"email": email}, (err, count) => {
-            if (err) {
-                return res.status(500).render('index', { alert: { type: 'warning', msg: 'Database error. Please try again later...'} })
-            } else if (count > 0) {
+        } else {
+            // User not registered
+            // Check if has an invitation
+            const invitation = await Invitation.countDocuments({"email": email})
+            if (invitation > 0) {
+                // User has been invited, proceed registration
                 return res.render('index', { register: {email: email}, alert: { type: 'info', msg: 'Welcome! Fill out the form below.'} })
             } else {
+                // User has not been invited, deny registration
                 return res.render('index', { alert: { type: 'error', msg: 'To access you need an invitation.'} })
             }
-        })
-    })
+        }
+    } catch (err) {
+        console.error(err)
+        return res.status(500).render('index', { alert: { type: 'warning', msg: 'Database error. Please try again later...'} })
+    }
 }
 
 /**
