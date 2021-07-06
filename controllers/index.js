@@ -107,7 +107,7 @@ async function identifyUser(req, res) {
     } catch (err) {
         // Database error
         console.error(err)
-        return res.status(500).render('index', { alert: { type: 'warning', msg: 'Database error. Please try again later...'} })
+        return res.status(500).render('index', { alert: { type: 'warning', msg: 'Internal error. Please try again later...'} })
     }
 }
 
@@ -179,25 +179,19 @@ async function registerUser(req, res) {
             subject: 'Welcome to Lufo',
             text: 'Your activation code is: ' + code
         }
-        const logs = await transporter.sendMail(mailOptions)
-        console.log(logs)
-            /*
-            , function(error, info){
-            if (error) {
-                console.log(error)
-                return res.status(500).render('index', { alert: { type: 'warning', msg: 'Email server error. Please try again later...'} })
-            } else {
-                console.log(info)
-                // Save it in the database
-                await user.save()
-                await activation.save()
-                return res.render('index', {alert: {type: 'success', msg: 'Check your inbox to confirm registration.'}})
-            }
-        })*/
+        await transporter.sendMail(mailOptions)
+
+        // Save it in the database
+        await user.save()
+        await activation.save()
+
+        // Registered successfully
+        return res.render('index', {alert: {type: 'success', msg: 'Check your inbox to confirm registration.'}})
+
     } catch (err) {
         // Database error
         console.error(err)
-        return res.status(500).render('index', { alert: { type: 'warning', msg: 'Database error. Please try again later...'} })
+        return res.status(500).render('index', { alert: { type: 'warning', msg: 'Internal error. Please try again later...'} })
     }
 }
 
@@ -256,7 +250,7 @@ async function loginUser(req, res) {
     } catch (err) {
         // Database error
         console.error(err)
-        return res.status(500).render('index', { alert: { type: 'warning', msg: 'Database error. Please try again later...'} })
+        return res.status(500).render('index', { alert: { type: 'warning', msg: 'Internal error. Please try again later...'} })
     }
 }
 
