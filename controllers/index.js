@@ -1,3 +1,4 @@
+const { jwtSecret, gmailUser, gmailPass } = require('../config')
 const mongoose = require("mongoose")
 require('../models/user')
 const User = mongoose.model('User')
@@ -9,9 +10,15 @@ require('../models/login_attempt')
 const LoginAttempt = mongoose.model('LoginAttempt')
 const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
-const { jwtSecret } = require('../config')
 const jwtSeconds = 900
 const nodemailer = require('nodemailer')
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: gmailUser,
+        pass: gmailPass
+    }
+})
 
 function getIndexPage(req, res) {
     res.render('index')
@@ -169,9 +176,22 @@ async function registerUser(req, res) {
         const activation = new Activation({email, code})
         await activation.save()
 
-        // TODO: send email
-        return res.render('index', {alert: {type: 'success', msg: 'Check your inbox to confirm registration.'}})
-
+        // Send email
+        const mailOptions = {
+            from: gmailUser,
+            to: email,
+            subject: 'Welcome to Lufo',
+            text: 'Your activation code is: ' + code
+        }
+        await transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+                console.log(error)
+                return res.status(500).render('index', { alert: { type: 'warning', msg: 'Email server error. Please try again later...'} })
+            } else {
+                console.log(info)
+                return res.render('index', {alert: {type: 'success', msg: 'Check your inbox to confirm registration.'}})
+            }
+        })
     } catch (err) {
         // Database error
         console.error(err)
