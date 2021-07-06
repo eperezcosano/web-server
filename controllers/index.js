@@ -10,7 +10,7 @@ require('../models/login_attempt')
 const LoginAttempt = mongoose.model('LoginAttempt')
 const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
-const jwtSeconds = 900
+const jwtSeconds = 86400
 const nodemailer = require('nodemailer')
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -82,11 +82,12 @@ async function identifyUser(req, res) {
         const email = req.body.email
 
         // Find if exists with that email
-        const user = await User.findOne({"email": email}, {"email": 1})
+        const user = await User.findOne({"email": email})
 
         if (user) {
             // User registered
             if (!user.activation) {
+                // TODO: check attempts
                 // User needs to activate account
                 return res.render('index', { login: {email: email, activation: true}, alert: { type: 'info', msg: 'Welcome! Please, enter your activation code.'} })
             }
@@ -201,8 +202,7 @@ async function registerUser(req, res) {
         await activation.save()
 
         // Registered successfully
-        //TODO: location /
-        return res.render('index', {alert: {type: 'success', msg: 'Check your inbox to confirm registration.'}})
+        return res.location('/').render('index', {alert: {type: 'success', msg: 'Check your inbox to confirm registration.'}})
 
     } catch (err) {
         // Database error
@@ -237,6 +237,7 @@ async function loginUser(req, res) {
             if (pass !== activation.code) {
                 console.log(pass, activation.code)
                 // Incorrect code
+                // TODO: check attempts
                 return res.status(400).render('index', {login: {email, activation: true}, alert: {type: 'error', msg: 'Incorrect code.'}})
             }
 
