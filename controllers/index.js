@@ -233,8 +233,8 @@ async function loginUser(req, res) {
         }
         if (!user.activation) {
             // User not activated
-            const activation = await Activation.findOne({"email": email})
-            if (req.body.code !== activation.code) {
+            const activation = await Activation.findOne({"email": email}).sort({created_at: -1})
+            if (pass !== activation.code) {
                 // Incorrect code
                 return res.status(400).render('index', {login: {email, activation: true}, alert: {type: 'error', msg: 'Incorrect code.'}})
             }
