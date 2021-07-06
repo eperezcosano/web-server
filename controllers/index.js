@@ -113,6 +113,7 @@ async function identifyUser(req, res) {
             }
         }
     } catch (err) {
+        // Database error
         console.error(err)
         return res.status(500).render('index', { alert: { type: 'warning', msg: 'Database error. Please try again later...'} })
     }
@@ -126,77 +127,71 @@ async function identifyUser(req, res) {
  * @json req.body: {name: string, surname:string, email:string, pass: string}
  * @returns 201 or 409
  */
-function registerUser(req, res) {
+async function registerUser(req, res) {
+    try {
+        // Collect all User data from the body JSON
+        const email = req.body.email
+        const uname = req.body.uname
+        const pass = req.body.pass
+        const cpass = req.body.cpass
+        const hcaptcha = req.hcaptcha
 
-    // Collect all User data from the body JSON
-    const email = req.body.email
-    const uname = req.body.uname
-    const pass = req.body.pass
-    const cpass = req.body.cpass
-    const hcaptcha = req.hcaptcha
+        // Check if passwords match
+        if (pass !== cpass) {
+            return res.status(400).render('index', {register: {email}, alert: {type: 'error', msg: 'Passwords do not match.'}})
+        }
 
-    // Check if passwords match
-    if (pass !== cpass) {
-        return res.status(400).render('index', {register: {email}, alert: {type: 'error', msg: 'Passwords do not match.'}})
-    }
+        // Check if is a robot
+        if (!hcaptcha) {
+            return res.status(400).render('index', {register: {email}, alert: {type: 'error', msg: 'You are a robot!'}})
+        }
 
-    // Check if is a robot
-    if (!hcaptcha) {
-        return res.status(400).render('index', {register: {email}, alert: {type: 'error', msg: 'You are a robot!'}})
-    }
-
-    // Find if exists a User with that email
-    User.countDocuments({"email": email}, (err, count) => {
-        if (err) {
-            return res.status(500).render('index', { alert: { type: 'warning', msg: 'Database error. Please try again later...'} })
-        } else if (count > 0) {
+        let count
+        // Find if exists a User with that email
+        count = await User.countDocuments({"email": email})
+        if (count > 0) {
+            // User with that email already exists
             return res.status(409).render('index', {register: {email}, alert: {type: 'error', msg: 'User with that email already exists.'}})
         }
-        // Find if exists a User with that username
-        User.countDocuments({"uname": uname}, (err, count) => {
-            if (err) {
-                return res.status(500).render('index', { alert: { type: 'warning', msg: 'Database error. Please try again later...'} })
-            } else if (count > 0) {
-                return res.status(409).render('index', {register: {email}, alert: {type: 'error', msg: 'Username already exists.'}})
-            }
 
-            // Generate the salt and calculate the digest
-            const salt = generateSalt()
-            const digest = hash(pass, salt)
+        // Find if exists a User with that email
+        count = await User.countDocuments({"uname": uname})
+        if (count > 0) {
+            // Username already exists
+            return res.status(409).render('index', {register: {email}, alert: {type: 'error', msg: 'Username already exists.'}})
+        }
 
-            // Save it in the database
-            const user = new User({
-                email: email,
-                uname: uname,
-                rol: null,
-                ip: req.ip,
-                activation: false,
-                digest: digest,
-                salt: salt
-            })
-            user.save({},(err, doc) => {
-                if (err) {
-                    return res.status(500).render('index', { alert: { type: 'warning', msg: 'Database error. Please try again later...'} })
-                } else {
-                    const code = generateSalt()
-                    const activation = new Activation({email, code})
-                    activation.save({}, (err, doc) => {
-                        if (err || !doc) {
-                            return res.status(500).render('index', { alert: { type: 'warning', msg: 'Database error. Please try again later...'} })
-                        } else {
-                            //TODO: send email
-                            return res.render('index', {alert: {type: 'success', msg: 'Check your inbox to confirm registration.'}})
-                        }
-                    })
-                    /*
-                    let token = generateJWT(doc._id, doc.email, doc.uname)
-                    res.cookie('token', token, { maxAge: jwtSeconds * 1000, httpOnly: true, secure: true})
-                    return res.redirect('/')
-                    */
-                }
-            })
+        // Generate the salt and calculate the digest
+        const salt = generateSalt()
+        const digest = hash(pass, salt)
+
+        // Create a new User
+        const user = new User({
+            email: email,
+            uname: uname,
+            rol: null,
+            ip: req.ip,
+            activation: false,
+            digest: digest,
+            salt: salt
         })
-    })
+
+        // Save it in the database
+        await user.save()
+
+        // Create code activation
+        const code = generateSalt()
+        const activation = new Activation({email, code})
+        await activation.save()
+
+        // TODO: send email
+        return res.render('index', {alert: {type: 'success', msg: 'Check your inbox to confirm registration.'}})
+
+    } catch (err) {
+        // Database error
+        console.error(err)
+        return res.status(500).render('index', { alert: { type: 'warning', msg: 'Database error. Please try again later...'} })
+    }
 }
 
 /**
