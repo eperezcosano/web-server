@@ -252,7 +252,6 @@ async function loginUser(req, res) {
 
             // Get last 3 login attempts and check last IP match
             const attempts = await LoginAttempt.find({"user_id": user.id}).sort({createdAt: -1}).limit(3)
-            console.log(attempts)
             if ((attempts.length === 3 && attempts.every((attempt) => !attempt.success)) || req.ip !== user.ip) {
                 if (!req.hcaptcha) {
                     return res.status(400).render('index', {login: {email, hcaptcha: true}, alert: {type: 'error', msg: 'You are a robot!'}})
@@ -274,8 +273,7 @@ async function loginUser(req, res) {
                 await att.save()
 
                 // If is the third fail, load hCaptcha
-                console.log(attempts.slice(-2))
-                if (attempts.slice(-2).every(attempt => !attempt.success)) {
+                if (attempts.slice(0, 2).every(attempt => !attempt.success)) {
                     return res.render('index', { login: {email: email, hcaptcha: true}, alert: { type: 'error', msg: 'Incorrect password.'} })
                 }
 
