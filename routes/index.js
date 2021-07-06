@@ -53,4 +53,14 @@ router.post('/login',
     indexController.loginUser
 )
 
+//Activate account
+router.get('/activate/:email/:code',
+    limiter,
+    [
+        param('email').isEmail().withMessage('Invalid email.').normalizeEmail(),
+    ],
+    validator.index,
+    indexController.loginUser
+)
+
 module.exports = router;

@@ -192,9 +192,9 @@ async function registerUser(req, res) {
             from: '"Lufo" <' + gmailUser + '>',
             to: email,
             subject: 'Welcome to Lufo',
-            text: 'Your activation code is: ' + code
+            text: 'Your activation code is: ' + code,
+            html: 'https://lufo.ml/activate/' + encodeURIComponent(email) + '/' + code
         }
-        // TODO: direct link
         await transporter.sendMail(mailOptions)
 
         // Save it in the database
@@ -221,9 +221,15 @@ async function registerUser(req, res) {
  */
 async function loginUser(req, res) {
     try {
-        // Collect the credentials from the body JSON
-        const email = req.body.email
-        const pass = req.body.pass
+        let email, pass
+        if (req.body.email && req.body.pass) {
+            // Collect the credentials from the body JSON
+            email = req.body.email
+            pass = req.body.pass
+        } else if (req.params.email && req.params.code) {
+            email = decodeURIComponent(req.params.email)
+            pass = req.params.code
+        }
 
         // Find the User
         const user = await User.findOne({"email": email})
