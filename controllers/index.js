@@ -1,14 +1,15 @@
-require('../models/user')
-require('../models/invitation')
-const crypto = require('crypto')
 const mongoose = require("mongoose")
+require('../models/user')
 const User = mongoose.model('User')
+require('../models/invitation')
+const Invitation = mongoose.model('Invitation')
+require('../models/activation')
+const Activation = mongoose.model('Activation')
+const crypto = require('crypto')
 const path = require('path')
 const fs = require('fs')
 const jwt = require('jsonwebtoken')
 const jwtSeconds = 900
-const Invitation = mongoose.model('Invitation')
-
 
 function getIndexPage(req, res) {
     res.render('index')
@@ -90,14 +91,17 @@ function identifyUser(req, res) {
 
     // Find if exists with that email
     User.findOne({"email": email}, {"email": 1}, {},(err, user) => {
-        if (err) {
+        if (err || !user) {
             return res.status(500).render('index', { alert: { type: 'warning', msg: 'Database error. Please try again later...'} })
         } else if (user) {
-            //TODO: Login attempts for captcha
             //TODO: IPs missmatch captcha
+            console.log('current IP', req.ip, "db IP", user.ip)
+            //TODO: Account activation
+            console.log('Activation', user.activation)
+            //TODO: collect lasts attempts if captcha
             return res.render('index', { login: {email: email}, alert: { type: 'info', msg: 'Welcome back! Please, enter your credentials below.'} })
         }
-        //TODO: Account activation
+
         Invitation.countDocuments({"email": email}, (err, count) => {
             if (err) {
                 return res.status(500).render('index', { alert: { type: 'warning', msg: 'Database error. Please try again later...'} })
@@ -132,6 +136,7 @@ function registerUser(req, res) {
         return res.status(400).render('index', {register: {email}, alert: {type: 'error', msg: 'Passwords do not match.'}})
     }
 
+    // Check if is a robot
     if (!hcaptcha) {
         return res.status(400).render('index', {register: {email}, alert: {type: 'error', msg: 'You are a robot!'}})
     }
@@ -156,14 +161,34 @@ function registerUser(req, res) {
             const digest = hash(pass, salt)
 
             // Save it in the database
-            const user = new User({email, uname, digest, salt})
+            const user = new User({
+                email: email,
+                uname: uname,
+                rol: null,
+                ip: req.ip,
+                activation: false,
+                digest: digest,
+                salt: salt
+            })
             user.save({},(err, doc) => {
                 if (err) {
                     return res.status(500).render('index', { alert: { type: 'warning', msg: 'Database error. Please try again later...'} })
                 } else {
+                    const code = generateSalt()
+                    const activation = new Activation({email, code})
+                    activation.save({}, (err, doc) => {
+                        if (err || !doc) {
+                            return res.status(500).render('index', { alert: { type: 'warning', msg: 'Database error. Please try again later...'} })
+                        } else {
+                            //TODO: send email
+                            return res.render('index', {alert: {type: 'success', msg: 'Check your inbox to confirm registration.'}})
+                        }
+                    })
+                    /*
                     let token = generateJWT(doc._id, doc.email, doc.uname)
                     res.cookie('token', token, { maxAge: jwtSeconds * 1000, httpOnly: true, secure: true})
                     return res.redirect('/')
+                    */
                 }
             })
         })
@@ -190,6 +215,27 @@ function loginUser(req, res) {
             return res.status(500).render('index', { alert: { type: 'warning', msg: 'Database error. Please try again later...'} })
         } else if (!doc) {
             return res.status(401).render('index', {login: {email}, alert: {type: 'error', msg: 'Incorrect password.'}})
+        } else if (!doc.activation) {
+            Activation.findOne({"email": email} , {}, {}, (err, doc) => {
+                if (err || !doc) {
+                    return res.status(500).render('index', { alert: { type: 'warning', msg: 'Database error. Please try again later...'} })
+                } else if (req.body.code !== doc.code) {
+                    return res.status(400).render('index', {login: {email}, alert: {type: 'error', msg: 'Incorrect code.'}})
+                }
+                //TODO: check expiration 86400ms
+                /*} else if ()*/
+                Activation.deleteMany({"email": email}, {}, (err) => {
+                    if (err) {
+                        return res.status(500).render('index', { alert: { type: 'warning', msg: 'Database error. Please try again later...'} })
+                    }
+                    User.updateOne({"email": email}, {"activation": true}, {}, (err, res) => {
+                        if (err) {
+                            return res.status(500).render('index', { alert: { type: 'warning', msg: 'Database error. Please try again later...'} })
+                        }
+
+                    })
+                })
+            })
         }
 
         // Collect its digest and salt from database

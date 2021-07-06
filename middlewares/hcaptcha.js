@@ -3,7 +3,7 @@ const querystring = require('querystring')
 
 function verify(req, res, next) {
     if (!req.body || !req.body['h-captcha-response']) {
-        console.log('No body')
+        // console.log('No body')
         req.hcaptcha = false
         return next()
     }
@@ -25,13 +25,13 @@ function verify(req, res, next) {
         let buffer = ''
         response
             .on('error', () => {
-                console.log('Req error')
+                // console.log('Req error')
                 req.hcaptcha = false
                 return next()
             })
             .on('data', (chunk) => buffer += chunk)
             .on('end', () => {
-                console.log(JSON.parse(buffer))
+                // console.log(JSON.parse(buffer))
                 req.hcaptcha = JSON.parse(buffer).success
                 return next()
             })
@@ -40,7 +40,7 @@ function verify(req, res, next) {
         })
     })
     request.on('error', () => {
-        console.log('Req error')
+        // console.log('Req error')
         req.hcaptcha = false
         return next()
     })

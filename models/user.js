@@ -10,13 +10,17 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    rol: {
+        type: String,
+        default: 'Member'
+    },
     ip: {
         type: String,
         required: true
     },
-    rol: {
-        type: String,
-        default: 'Member'
+    activation: {
+        type: Boolean,
+        default: false
     },
     digest: {
         type: String,

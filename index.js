@@ -2,14 +2,16 @@
 * TODO: Email, invitations, attempts, webtorrent
 * */
 const express = require('express')
-const greenlock = require('greenlock-express')
+const http = require('http')
 const nunjucks = require('nunjucks')
 const mongoose = require('mongoose')
 const cookieParser = require('cookie-parser')
 
-const MONGO_URI = 'mongodb://localhost/web-server';
+const MONGO_URI = 'mongodb://localhost/web-server'
+const port = 3000
 
 const app = express()
+const server = http.createServer(app)
 const router = require('./routes/index')
 
 app.set('view engine', 'njk')
@@ -35,12 +37,8 @@ mongoose.connect(MONGO_URI,
     process.exit(-1);
 })
 
-greenlock.init({
-    packageRoot: __dirname,
-    configDir: './greenlock.d',
-    maintainerEmail: 'izanperez98@gmail.com',
-    staging: true,
-    cluster: false
-}).serve(app)
+server.listen(port, () => {
+    console.log('Listening on http://localhost:' + port)
+})
 
 
