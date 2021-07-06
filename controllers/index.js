@@ -8,10 +8,10 @@ const Activation = mongoose.model('Activation')
 require('../models/login_attempt')
 const LoginAttempt = mongoose.model('LoginAttempt')
 const crypto = require('crypto')
-const path = require('path')
-const fs = require('fs')
 const jwt = require('jsonwebtoken')
+const { jwtSecret } = require('../config')
 const jwtSeconds = 900
+const nodemailer = require('nodemailer')
 
 function getIndexPage(req, res) {
     res.render('index')
@@ -53,13 +53,13 @@ function hash(password, salt) {
 /**
  * Generates a JSON Web Token
  * @function
- * @param id, email, uname,
+ * @param id
+ * @param email
+ * @param uname
  * @returns jwt
  */
 function generateJWT(id, email, uname) {
-    const secret = fs.readFileSync(path.join(__dirname, '/../certs/jwt-secret.txt'), 'ascii')
-        .split('--')[0]
-    return jwt.sign({ id, email, uname }, secret, { expiresIn: jwtSeconds + 's' })
+    return jwt.sign({ id, email, uname }, jwtSecret, { expiresIn: jwtSeconds + 's' })
 }
 /**
  * Identifies whether a User is registered or not

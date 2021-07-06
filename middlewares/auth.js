@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken')
-const path = require('path')
-const fs = require('fs')
+const { jwtSecret } = require('../config')
 
 function verifyToken(req, res, next) {
 
@@ -10,9 +9,7 @@ function verifyToken(req, res, next) {
     }
     let payload
     try {
-        const secret = fs.readFileSync(path.join(__dirname, '/../certs/jwt-secret.txt'), 'ascii')
-            .split('--')[0]
-        payload = jwt.verify(token, secret)
+        payload = jwt.verify(token, jwtSecret)
         res.render('home', {payload})
     } catch (e) {
         next()
