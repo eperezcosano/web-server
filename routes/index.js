@@ -5,67 +5,40 @@ const auth = require('../middlewares/auth')
 const hcaptcha = require('../middlewares/hcaptcha')
 const { body, param } = require('express-validator')
 
+// Index page
 router.get('/', auth.verifyToken, indexController.getIndexPage)
 router.post('/',
     [
-        body('email')
-            .isEmail()
-            .withMessage('Invalid email.')
-            .normalizeEmail()
+        body('email').isEmail().withMessage('Invalid email.').normalizeEmail()
     ],
     validator.index,
     indexController.identifyUser
 )
-router.get('/register', indexController.getRegistrationPage)
-router.get('/register/:email',
-    [
-        param('email')
-            .isEmail()
-            .withMessage('Invalid email.')
-            .normalizeEmail()
-    ],
-    auth.verifyToken,
-    validator.index,
-    indexController.getRegistrationPage
-)
+
+// Registration page
 router.post(
     '/register',
     [
-        body('email')
-            .isEmail()
-            .withMessage('Invalid email.')
-            .normalizeEmail(),
+        body('email').isEmail().withMessage('Invalid email.').normalizeEmail(),
         body('uname')
             .isAlphanumeric()
             .withMessage('Username must only contain letters and numbers.')
             .isLength({ min: 3, max: 30 })
             .withMessage('Invalid username length.'),
-        /*body('pass')
-            .isStrongPassword()
-            .withMessage('Password is weak.')*/
+        body('pass')
+            .isLength({min: 8})
+            .withMessage('Minimum password length is 8.')
     ],
     validator.index,
     hcaptcha.verify,
     indexController.registerUser
 )
-router.get('/login', indexController.getLoginPage)
-router.get('/login/:email',
-    [
-        param('email')
-            .isEmail()
-            .withMessage('Invalid email.')
-            .normalizeEmail()
-    ],
-    auth.verifyToken,
-    validator.index,
-    indexController.getLoginPage
-)
+
+// Login page
 router.post('/login',
     [
-        body('email')
-            .isEmail()
-            .withMessage('Invalid email.')
-            .normalizeEmail()
+        body('email').isEmail().withMessage('Invalid email.').normalizeEmail(),
+        body('pass').isLength({min: 8}).withMessage('Minimum password length is 8.')
     ],
     validator.index,
     indexController.loginUser

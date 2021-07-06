@@ -17,23 +17,6 @@ function getIndexPage(req, res) {
     res.render('index')
 }
 
-function getRegistrationPage(req, res) {
-    let email = req.params.email
-    if (!email) {
-        res.redirect('/')
-    } else {
-        res.render('index', {register: {email: decodeURIComponent(email)}})
-    }
-}
-function getLoginPage(req, res) {
-    let email = req.params.email
-    if (!email) {
-        res.redirect('/')
-    } else {
-        res.render('index', {login: {email: decodeURIComponent(email)}})
-    }
-}
-
 /**
  * Generates random string of characters i.e salt
  * @function
@@ -257,8 +240,6 @@ async function loginUser(req, res) {
 
 module.exports = {
     getIndexPage,
-    getRegistrationPage,
-    getLoginPage,
     identifyUser,
     registerUser,
     loginUser
