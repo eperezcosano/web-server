@@ -253,7 +253,7 @@ async function loginUser(req, res) {
             // Get last 3 login attempts and check last IP match
             const attempts = await LoginAttempt.find({"user_id": user.id}).sort({createdAt: -1}).limit(3)
             if ((attempts.length === 3 && attempts.every((attempt) => !attempt.success)) || req.ip !== user.ip) {
-                if (!req.body.hcaptcha) {
+                if (!req.hcaptcha) {
                     return res.status(400).render('index', {login: {email, hcaptcha: true}, alert: {type: 'error', msg: 'You are a robot!'}})
                 }
             }

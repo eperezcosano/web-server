@@ -2,6 +2,7 @@ const { validationResult } = require('express-validator')
 
 function index(req, res, next) {
     // Validate form fields
+    //TODO: not working with activation and hcaptcha flags
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
         const err = errors.array().reduce((obj, error) => Object.assign(obj, { [error.param]: error.msg }), {})
