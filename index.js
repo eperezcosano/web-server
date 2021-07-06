@@ -1,5 +1,5 @@
 /*
-* TODO: Email, invitations, attempts, webtorrent
+* TODO: webtorrent
 * */
 const express = require('express')
 const http = require('http')
