@@ -236,7 +236,7 @@ async function loginUser(req, res) {
             const activation = await Activation.findOne({"email": email})
             if (req.body.code !== activation.code) {
                 // Incorrect code
-                return res.status(400).render('index', {login: {email}, alert: {type: 'error', msg: 'Incorrect code.'}})
+                return res.status(400).render('index', {login: {email, activation: true}, alert: {type: 'error', msg: 'Incorrect code.'}})
             }
 
             // TODO: check expiration 86400ms
@@ -262,25 +262,7 @@ async function loginUser(req, res) {
             const salt = user.salt
 
             // Make a hash with the provided password and compare
-            if (digest === hash(pass, salt)) {
-                // Update IP
-                await User.updateOne({"email": email}, {"ip": req.ip})
-
-                // Insert a success attempt
-                const att = new LoginAttempt({
-                    user_id: user.id,
-                    ip: req.ip,
-                    success: true
-                })
-                await att.save()
-
-                // Generate jwt
-                const token = generateJWT(user._id, user.email, user.uname)
-                res.cookie('token', token, { maxAge: jwtSeconds * 1000, httpOnly: true, secure: true})
-
-                // Success login
-                return res.redirect('/')
-            } else {
+            if (digest !== hash(pass, salt)) {
                 // Insert a failed attempt
                 const att = new LoginAttempt({
                     user_id: user.id,
@@ -298,6 +280,24 @@ async function loginUser(req, res) {
                 return res.status(401).render('index', {login: {email}, alert: {type: 'error', msg: 'Incorrect password.'}})
             }
         }
+
+        // Update IP
+        await User.updateOne({"email": email}, {"ip": req.ip})
+
+        // Insert a success attempt
+        const att = new LoginAttempt({
+            user_id: user.id,
+            ip: req.ip,
+            success: true
+        })
+        await att.save()
+
+        // Generate jwt
+        const token = generateJWT(user._id, user.email, user.uname)
+        res.cookie('token', token, { maxAge: jwtSeconds * 1000, httpOnly: true, secure: true})
+
+        // Success login
+        return res.redirect('/')
 
     } catch (err) {
         // Database error

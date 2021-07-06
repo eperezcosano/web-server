@@ -138,9 +138,9 @@
         <div class="mb-3 row">
             <label for="pass" class="col-sm-4 col-form-label">{{ 'Code' if activation else 'Password' }}</label>
             <div class="col-sm-8">
-                <input id="pass" name="pass" type="password" class="form-control {{ 'is-invalid' if errors.pass }}" placeholder="Password" required>
+                <input id="pass" name="pass" type="password" class="form-control {{ 'is-invalid' if errors.pass }}" placeholder="{{ 'Activation code' if activation else 'Password' }}" required>
                 <div class="invalid-feedback">
-                    {{ errors.pass if errors.pass else 'Provide a valid password.' }}
+                    {{ errors.pass if errors.pass else 'Field is required.' }}
                 </div>
             </div>
         </div>
