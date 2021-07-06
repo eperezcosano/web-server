@@ -38,7 +38,7 @@ router.post(
 router.post('/login',
     [
         body('email').isEmail().withMessage('Invalid email.').normalizeEmail(),
-        body('pass').isLength({min: 8}).withMessage('Minimum password length is 8.')
+        body('pass').isLength({min: 8}).withMessage('Minimum length is 8.')
     ],
     validator.index,
     indexController.loginUser

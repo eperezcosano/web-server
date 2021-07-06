@@ -86,12 +86,26 @@ async function identifyUser(req, res) {
 
         if (user) {
             // User registered
-            //TODO: IPs missmatch captcha
-            console.log('current IP', req.ip, "db IP", user.ip)
-            //TODO: Account activation
-            console.log('Activation', user.activation)
-            //TODO: collect lasts attempts if captcha
-            return res.render('index', { login: {email: email}, alert: { type: 'info', msg: 'Welcome back! Please, enter your credentials below.'} })
+            if (!user.activation) {
+                // User needs to activate account
+                return res.render('index', { login: {email: email, activation: true}, alert: { type: 'info', msg: 'Welcome! Please, enter your activation code.'} })
+            }
+
+            // Get last 3 login attempts
+            const attempts = await LoginAttempt.find({"user_id": user.id}).sort({created_at: -1}).limit(3)
+            if (attempts.length === 3 && attempts.every((attempt) => !attempt.success)) {
+                // All 3 attempts failed, hCaptcha required
+                return res.render('index', { login: {email: email, hcaptcha: true} })
+            }
+
+            // Check last IP match
+            if (req.ip !== user.ip) {
+                // Different IP, hCaptcha required
+                return res.render('index', { login: {email: email, hcaptcha: true} })
+            }
+
+            // Normal login
+            return res.render('index', { login: {email: email} })
         } else {
             // User not registered
             // Check if has an invitation
@@ -174,11 +188,12 @@ async function registerUser(req, res) {
 
         // Send email
         const mailOptions = {
-            from: gmailUser,
+            from: '"Lufo" <' + gmailUser + '>',
             to: email,
             subject: 'Welcome to Lufo',
             text: 'Your activation code is: ' + code
         }
+        // TODO: direct link
         await transporter.sendMail(mailOptions)
 
         // Save it in the database
@@ -186,6 +201,7 @@ async function registerUser(req, res) {
         await activation.save()
 
         // Registered successfully
+        //TODO: location /
         return res.render('index', {alert: {type: 'success', msg: 'Check your inbox to confirm registration.'}})
 
     } catch (err) {
@@ -233,16 +249,52 @@ async function loginUser(req, res) {
         } else {
             // User is activated
 
+            // Get last 3 login attempts and check last IP match
+            const attempts = await LoginAttempt.find({"user_id": user.id}).sort({created_at: -1}).limit(3)
+            if ((attempts.length === 3 && attempts.every((attempt) => !attempt.success)) || req.ip !== user.ip) {
+                if (!req.body.hcaptcha) {
+                    return res.status(400).render('index', {login: {email}, alert: {type: 'error', msg: 'You are a robot!'}})
+                }
+            }
+
             // Collect its digest and salt from database
             const digest = user.digest
             const salt = user.salt
 
             // Make a hash with the provided password and compare
             if (digest === hash(pass, salt)) {
+                // Update IP
+                await User.updateOne({"email": email}, {"ip": req.ip})
+
+                // Insert a success attempt
+                const att = new LoginAttempt({
+                    user_id: user.id,
+                    ip: req.ip,
+                    success: true
+                })
+                await att.save()
+
+                // Generate jwt
                 const token = generateJWT(user._id, user.email, user.uname)
                 res.cookie('token', token, { maxAge: jwtSeconds * 1000, httpOnly: true, secure: true})
+
+                // Success login
                 return res.redirect('/')
             } else {
+                // Insert a failed attempt
+                const att = new LoginAttempt({
+                    user_id: user.id,
+                    ip: req.ip,
+                    success: false
+                })
+                await att.save()
+
+                // If is the third fail, load hCaptcha
+                if (attempts.slice(-2).every(attempt => !attempt.success)) {
+                    return res.render('index', { login: {email: email, hcaptcha: true}, alert: { type: 'error', msg: 'Incorrect password.'} })
+                }
+
+                // Incorrect password
                 return res.status(401).render('index', {login: {email}, alert: {type: 'error', msg: 'Incorrect password.'}})
             }
         }

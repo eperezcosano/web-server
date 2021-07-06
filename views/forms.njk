@@ -122,7 +122,7 @@
 {% endmacro %}
 
 {# Login #}
-{% macro login(email, hcaptcha, errors) %}
+{% macro login(email, hcaptcha, activation, errors) %}
     <form action="/login" method="post" class="row g-3 needs-validation" novalidate>
         {# Email #}
         <div class="mb-3 row">
@@ -136,7 +136,7 @@
         </div>
         {# Password #}
         <div class="mb-3 row">
-            <label for="pass" class="col-sm-4 col-form-label">Password</label>
+            <label for="pass" class="col-sm-4 col-form-label">{{ 'Code' if activation else 'Password' }}</label>
             <div class="col-sm-8">
                 <input id="pass" name="pass" type="password" class="form-control {{ 'is-invalid' if errors.pass }}" placeholder="Password" required>
                 <div class="invalid-feedback">

@@ -24,7 +24,7 @@
             {{ forms.register(register.email, errors) }}
         {% elseif login %}
             {# Login #}
-            {{ forms.login(login.email, login.hcaptcha, errors) }}
+            {{ forms.login(login.email, login.hcaptcha, login.activation, errors) }}
         {% endif %}
     </div>
 </div>
