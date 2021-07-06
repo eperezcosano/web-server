@@ -273,7 +273,7 @@ async function loginUser(req, res) {
                 await att.save()
 
                 // If is the third fail, load hCaptcha
-                if (attempts.slice(-2).every(attempt => !attempt.success)) {
+                if (attempts.slice(1).every(attempt => !attempt.success)) {
                     return res.render('index', { login: {email: email, hcaptcha: true}, alert: { type: 'error', msg: 'Incorrect password.'} })
                 }
 

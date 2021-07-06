@@ -41,6 +41,7 @@ router.post('/login',
         body('pass').isLength({min: 8}).withMessage('Minimum length is 8.')
     ],
     validator.index,
+    hcaptcha.verify,
     indexController.loginUser
 )
 
