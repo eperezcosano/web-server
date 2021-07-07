@@ -184,7 +184,7 @@ async function registerUser(req, res) {
             text: 'Your activation code is: ' + code,
             html: "Hello <b>" + uname + "</b>!<br>" +
                 "Use this link to activate your account: <br>" +
-                "<a>https://lufo.ml/activate/" + encodeURIComponent(email) + "/" + code + "</a><br>" +
+                "<a href='https://lufo.ml/activate/" + encodeURIComponent(email) + "/" + code + "'></a><br>" +
                 "Your activation code is: <br>" +
                 "<b>" + code + "</b>"
         }
@@ -195,7 +195,7 @@ async function registerUser(req, res) {
         await activation.save()
 
         // Registered successfully
-        return res.location('/').render('index', {alert: {type: 'success', msg: 'Check your inbox to confirm registration.'}})
+        return res.redirect('index', {alert: {type: 'success', msg: 'Check your inbox to confirm registration.'}})
 
     } catch (err) {
         // Database error
