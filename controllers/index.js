@@ -231,8 +231,6 @@ async function loginUser(req, res) {
             // User not activated
             let code = req.body.pass ? req.body.pass : req.params.code
             const activation = await Activation.findOne({"email": email}).sort({createdAt: -1})
-            // TODO: check expiration
-            console.log('Time elapsed (min)', Math.floor(new Date() - activation.createdAt) / 60000)
             if (code !== activation.code) {
 
                 // Insert a failed attempt
@@ -251,6 +249,9 @@ async function loginUser(req, res) {
                 // Incorrect code
                 return res.status(401).render('index', {login: {email, activation: true}, alert: {type: 'error', msg: 'Incorrect code.'}})
 
+            } else if (Math.floor(new Date() - activation.createdAt) / 60000 >= 5) {
+                // Code expired
+                return res.render('index', {login: {email, activation: true}, alert: {type: 'error', msg: 'Code has expired.'}})
             } else {
                 // Delete activation
                 await Activation.deleteMany({"email": email})
