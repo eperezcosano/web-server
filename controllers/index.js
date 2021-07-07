@@ -86,27 +86,16 @@ async function identifyUser(req, res) {
 
         if (user) {
             // User registered
-            if (!user.activation) {
-                // TODO: check attempts
-                // User needs to activate account
-                return res.render('index', { login: {email: email, activation: true}, alert: { type: 'info', msg: 'Welcome! Please, enter your activation code.'} })
-            }
-
             // Get last 3 login attempts
-            const attempts = await LoginAttempt.find({"user_id": user.id}).sort({createdAt: -1}).limit(3)
-            if (attempts.length === 3 && attempts.every((attempt) => !attempt.success)) {
-                // All 3 attempts failed, hCaptcha required
-                return res.render('index', { login: {email: email, hcaptcha: true} })
-            }
-
             // Check last IP match
-            if (req.ip !== user.ip) {
-                // Different IP, hCaptcha required
-                return res.render('index', { login: {email: email, hcaptcha: true} })
+            const attempts = await LoginAttempt.find({"user_id": user.id}).sort({createdAt: -1}).limit(3)
+            if ((attempts.length === 3 && attempts.every((attempt) => !attempt.success)) || req.ip !== user.ip) {
+                // hCaptcha required
+                return res.render('index', { login: {email: email, hcaptcha: true, activation: !user.activation} })
             }
 
             // Normal login
-            return res.render('index', { login: {email: email} })
+            return res.render('index', { login: {email: email, activation: !user.activation} })
         } else {
             // User not registered
             // Check if has an invitation
@@ -193,7 +182,11 @@ async function registerUser(req, res) {
             to: email,
             subject: 'Welcome to Lufo',
             text: 'Your activation code is: ' + code,
-            html: 'https://lufo.ml/activate/' + encodeURIComponent(email) + '/' + code
+            html: "Hello <b>" + uname + "</b>!<br>" +
+                "Use this link to activate your account: <br>" +
+                "<a>https://lufo.ml/activate/" + encodeURIComponent(email) + "/" + code + "</a><br>" +
+                "Your activation code is: <br>" +
+                "<b>" + code + "</b>"
         }
         await transporter.sendMail(mailOptions)
 
@@ -221,32 +214,42 @@ async function registerUser(req, res) {
  */
 async function loginUser(req, res) {
     try {
-        let email, pass
-        if (req.body.email && req.body.pass) {
-            // Collect the credentials from the body JSON
-            email = req.body.email
-            pass = req.body.pass
-        } else if (req.params.email && req.params.code) {
-            email = decodeURIComponent(req.params.email)
-            pass = req.params.code
-        }
-
+        let email = req.body.email ? req.body.email : decodeURIComponent(req.params.email)
         // Find the User
         const user = await User.findOne({"email": email})
         if (!user) {
             // User not found
             return res.status(401).render('index', {login: {email}, alert: {type: 'error', msg: 'Incorrect password.'}})
         }
+        // Get last 3 login attempts and check last IP match
+        const attempts = await LoginAttempt.find({"user_id": user.id}).sort({createdAt: -1}).limit(3)
+        if ((attempts.length === 3 && attempts.every((attempt) => !attempt.success)) || req.ip !== user.ip) {
+            if (!req.hcaptcha) {
+                return res.status(400).render('index', {login: {email, hcaptcha: true, activation: !user.activation}, alert: {type: 'error', msg: 'You are a robot!'}})
+            }
+        }
         if (!user.activation) {
             // User not activated
+            let code = req.body.pass ? req.body.pass : req.params.code
             const activation = await Activation.findOne({"email": email}).sort({createdAt: -1})
-            if (pass !== activation.code) {
-                // Incorrect code
-                // TODO: check attempts
-                return res.status(400).render('index', {login: {email, activation: true}, alert: {type: 'error', msg: 'Incorrect code.'}})
+            // TODO: check expiration
+            console.log('Time elapsed (min)', Math.floor(new Date() - activation.createdAt) / 60000)
+            if (code !== activation.code) {
+
+                // Insert a failed attempt
+                const att = new LoginAttempt({
+                    user_id: user.id,
+                    ip: req.ip,
+                    success: false
+                })
+                await att.save()
+
+                // If is the third fail, load hCaptcha
+                if (attempts.length >= 2 && attempts.slice(0, 2).every(attempt => !attempt.success)) {
+                    return res.render('index', { login: {email: email, hcaptcha: true, activation: true}, alert: { type: 'error', msg: 'Incorrect code.'} })
+                }
             }
 
-            // TODO: check expiration 86400ms
             // Delete activation
             await Activation.deleteMany({"email": email})
 
@@ -256,20 +259,12 @@ async function loginUser(req, res) {
         } else {
             // User is activated
 
-            // Get last 3 login attempts and check last IP match
-            const attempts = await LoginAttempt.find({"user_id": user.id}).sort({createdAt: -1}).limit(3)
-            if ((attempts.length === 3 && attempts.every((attempt) => !attempt.success)) || req.ip !== user.ip) {
-                if (!req.hcaptcha) {
-                    return res.status(400).render('index', {login: {email, hcaptcha: true}, alert: {type: 'error', msg: 'You are a robot!'}})
-                }
-            }
-
             // Collect its digest and salt from database
             const digest = user.digest
             const salt = user.salt
 
             // Make a hash with the provided password and compare
-            if (digest !== hash(pass, salt)) {
+            if (digest !== hash(req.body.pass, salt)) {
                 // Insert a failed attempt
                 const att = new LoginAttempt({
                     user_id: user.id,

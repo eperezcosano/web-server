@@ -45,8 +45,7 @@ router.post(
 router.post('/login',
     limiter,
     [
-        body('email').isEmail().withMessage('Invalid email.').normalizeEmail(),
-        body('pass').isLength({min: 8}).withMessage('Minimum length is 8.')
+        body('email').isEmail().withMessage('Invalid email.').normalizeEmail()
     ],
     validator.index,
     hcaptcha.verify,
