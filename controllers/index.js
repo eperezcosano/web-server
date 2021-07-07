@@ -183,8 +183,7 @@ async function registerUser(req, res) {
             subject: 'Welcome to Lufo',
             text: 'Your activation code is: ' + code,
             html: "Hello <b>" + uname + "</b>!<br>" +
-                "Use this link to activate your account: <br>" +
-                "<a href='https://lufo.ml/activate/" + encodeURIComponent(email) + "/" + code + "'></a><br>" +
+                "Use <a href='https://lufo.ml/activate/" + encodeURIComponent(email) + "/" + code + "'>this link</a> to activate your account. <br>" +
                 "Your activation code is: <br>" +
                 "<b>" + code + "</b>"
         }
@@ -195,7 +194,7 @@ async function registerUser(req, res) {
         await activation.save()
 
         // Registered successfully
-        return res.redirect('index', {alert: {type: 'success', msg: 'Check your inbox to confirm registration.'}})
+        return res.render('index', {alert: {type: 'success', msg: 'Check your inbox to confirm registration.'}})
 
     } catch (err) {
         // Database error
@@ -248,13 +247,17 @@ async function loginUser(req, res) {
                 if (attempts.length >= 2 && attempts.slice(0, 2).every(attempt => !attempt.success)) {
                     return res.render('index', { login: {email: email, hcaptcha: true, activation: true}, alert: { type: 'error', msg: 'Incorrect code.'} })
                 }
+
+                // Incorrect code
+                return res.status(401).render('index', {login: {email, activation: true}, alert: {type: 'error', msg: 'Incorrect code.'}})
+
+            } else {
+                // Delete activation
+                await Activation.deleteMany({"email": email})
+
+                // Update User to activated
+                await User.updateOne({"email": email}, {"activation": true})
             }
-
-            // Delete activation
-            await Activation.deleteMany({"email": email})
-
-            // Update User to activated
-            await User.updateOne({"email": email}, {"activation": true})
 
         } else {
             // User is activated
