@@ -264,7 +264,7 @@ async function loginUser(req, res) {
             const salt = user.salt
 
             // Make a hash with the provided password and compare
-            if (digest !== hash(req.body.pass, salt)) {
+            if (!req.body.pass || digest !== hash(req.body.pass, salt)) {
                 // Insert a failed attempt
                 const att = new LoginAttempt({
                     user_id: user.id,
