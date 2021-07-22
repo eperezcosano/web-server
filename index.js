@@ -1,6 +1,6 @@
 /*
 * TODO:
-*  resend, logout
+*  Logout
 *  webtorrent
 * */
 const express = require('express')

@@ -9,6 +9,11 @@ const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 100
 })
+const resendLimiter = rateLimit({
+    windowMs: 5 * 60 * 1000,
+    max: 3,
+    message: "Too many send requests, please try again later..."
+})
 
 // Index page
 router.get('/', limiter, auth.verifyToken, indexController.getIndexPage)
@@ -64,7 +69,7 @@ router.get('/activate/:email/:code',
 
 //Resend activation code
 router.get('/resend/:email',
-    limiter,
+    resendLimiter,
     [
         param('email').isEmail().withMessage('Invalid email.').normalizeEmail(),
     ],
