@@ -142,7 +142,7 @@
                 <div class="invalid-feedback">
                     {{ errors.pass if errors.pass else 'Field is required.' }}
                 </div>
-                <button type="button" class="btn btn-link btn-sm">{{ 'Resend activation code' if activation else 'Forgot password?' }}</button>
+                <a href="/resend/{{ email }}" class="btn btn-link btn-sm">{{ 'Resend activation code' if activation else 'Forgot password?' }}</a>
             </div>
         </div>
         {% if hcaptcha %}

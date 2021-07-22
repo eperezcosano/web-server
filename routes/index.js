@@ -62,4 +62,14 @@ router.get('/activate/:email/:code',
     indexController.loginUser
 )
 
+//Resend activation code
+router.get('/resend/:email',
+    limiter,
+    [
+        param('email').isEmail().withMessage('Invalid email.').normalizeEmail(),
+    ],
+    validator.index,
+    indexController.resendCode
+)
+
 module.exports = router;

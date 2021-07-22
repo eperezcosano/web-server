@@ -312,9 +312,61 @@ async function loginUser(req, res) {
     }
 }
 
+/**
+ * Resend the activation code
+ * @function
+ * @param req
+ * @param res
+ * @returns 200
+ */
+async function resendCode(req, res) {
+
+    try {
+        // Get email param
+        let email = decodeURIComponent(req.params.email)
+
+        // Delete older activation codes
+        await Activation.deleteMany({"email": email})
+
+        // Turn account to non-activated (when password forgotten)
+        await User.updateOne({"email": email}, {"activation": false})
+
+        //Create new activation code
+        const code = generateSalt()
+        const activation = new Activation({email, code})
+
+        // Send email
+        const mailOptions = {
+            from: '"Lufo" <' + gmailUser + '>',
+            to: email,
+            subject: 'Lufo Activation Code',
+            text: 'Hello again! Your activation code is: ' + code,
+            html: "Hello again! <b>" + uname + "</b>!<br>" +
+                "If you have forgotten your password you must change it on your profile page<br>" +
+                "Use <a href='https://lufo.ml/activate/" + encodeURIComponent(email) + "/" + code + "'>this link</a> to activate your account. <br>" +
+                "Your activation code is: <br>" +
+                "<b>" + code + "</b>"
+        }
+        await transporter.sendMail(mailOptions)
+
+        // Save it in the database
+        await activation.save()
+
+        // Code sent successfully
+        return res.render('index', {alert: {type: 'success', msg: 'Sent. Check your inbox.'}})
+
+
+    } catch (err) {
+        // Database error
+        console.error(err)
+        return res.status(500).render('index', { alert: { type: 'warning', msg: 'Internal error. Please try again later...'} })
+    }
+}
+
 module.exports = {
     getIndexPage,
     identifyUser,
     registerUser,
-    loginUser
+    loginUser,
+    resendCode
 }
