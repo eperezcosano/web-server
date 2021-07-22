@@ -1,0 +1,18 @@
+body {
+    font-family: 'Quicksand' , serif;
+}
+
+nav {
+    background-color: #191c24;
+}
+
+#navbarNav {
+    justify-content: space-between;
+}
+
+.search-input {
+     width: 400px;
+     background: #212529;
+     border: 1px solid #6d757d;
+     color: #6d757d;
+}

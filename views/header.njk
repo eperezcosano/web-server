@@ -1,5 +1,5 @@
 {% macro home(payload) %}
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="background-color: #191c24;">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="/">
             <img src="/img/rainbow.png" alt="Logo" width="25" class="d-inline-block align-text-top">
@@ -8,7 +8,7 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav" style="justify-content: space-between;">
+        <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mb-lg-0">
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/">Home</a>
@@ -22,7 +22,7 @@
             </ul>
             <form class="d-flex">
                 <div class="input-group input-group-sm">
-                    <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="send-btn">
+                    <input type="text" class="form-control search-input" placeholder="Search" aria-label="Search" aria-describedby="send-btn">
                     <button class="btn btn-outline-secondary" type="submit" id="send-btn"><i class="bi bi-search"></i></button>
                 </div>
             </form>
