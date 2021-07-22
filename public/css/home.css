@@ -3,7 +3,7 @@ body {
 }
 
 nav {
-    background-color: #191c24;
+    background-color: #191c24 !important;
 }
 
 #navbarNav {
@@ -11,8 +11,8 @@ nav {
 }
 
 .search-input {
-     width: 400px;
-     background: #212529;
-     border: 1px solid #6d757d;
-     color: #6d757d;
+     width: 400px !important;
+     background: #212529 !important;
+     border: 1px solid #6d757d !important;
+     color: #6d757d !important;
 }
