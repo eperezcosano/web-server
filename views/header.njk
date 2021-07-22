@@ -19,24 +19,21 @@
                 <li class="nav-item">
                     <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                 </li>
-            </ul>
-            <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Test</a>
+                    <form>
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="send-btn">
+                            <button class="btn btn-outline-secondary" type="submit" id="send-btn"><i class="bi bi-search"></i></button>
+                        </div>
+                    </form>
                 </li>
             </ul>
-            <!--<form class="d-flex">
-                <div class="input-group input-group-sm">
-                    <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="send-btn">
-                    <button class="btn btn-outline-secondary" type="submit" id="send-btn"><i class="bi bi-search"></i></button>
-                </div>
-            </form>-->
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         {{ payload.uname }}
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="#">Profile</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="#">Logout</a></li>
