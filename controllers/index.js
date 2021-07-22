@@ -320,7 +320,6 @@ async function loginUser(req, res) {
  * @returns 200
  */
 async function resendCode(req, res) {
-
     try {
         // Get email param
         let email = decodeURIComponent(req.params.email)
@@ -341,7 +340,7 @@ async function resendCode(req, res) {
             to: email,
             subject: 'Lufo Activation Code',
             text: 'Hello again! Your activation code is: ' + code,
-            html: "Hello again! <b>" + uname + "</b>!<br>" +
+            html: "Hello again!<br>" +
                 "If you have forgotten your password you must change it on your profile page<br>" +
                 "Use <a href='https://lufo.ml/activate/" + encodeURIComponent(email) + "/" + code + "'>this link</a> to activate your account. <br>" +
                 "Your activation code is: <br>" +
@@ -354,7 +353,6 @@ async function resendCode(req, res) {
 
         // Code sent successfully
         return res.render('index', {alert: {type: 'success', msg: 'Sent. Check your inbox.'}})
-
 
     } catch (err) {
         // Database error
