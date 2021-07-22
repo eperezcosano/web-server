@@ -143,6 +143,7 @@
                     {{ errors.pass if errors.pass else 'Field is required.' }}
                 </div>
             </div>
+            <button type="button" class="btn btn-link">{{ 'Resend activation code' if activation else 'Forgot password?' }}</button>
         </div>
         {% if hcaptcha %}
         {# hCaptcha #}
