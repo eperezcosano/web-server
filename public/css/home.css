@@ -2,10 +2,6 @@ body {
     font-family: 'Quicksand' , serif;
 }
 
-nav {
-    background-color: #191c24 !important;
-}
-
 #navbarNav {
     justify-content: space-between;
 }
@@ -15,4 +11,8 @@ nav {
      background: #212529 !important;
      border: 1px solid #6d757d !important;
      color: #6d757d !important;
+}
+
+.wrapper {
+    background-color: #000;
 }
