@@ -10,7 +10,7 @@ const limiter = rateLimit({
     max: 100
 })
 const resendLimiter = rateLimit({
-    windowMs: 5 * 60 * 1000,
+    windowMs: 30 * 60 * 1000,
     max: 3,
     message: "Too many send requests, please try again later..."
 })
