@@ -9,6 +9,7 @@
   "author": "Izan Perez Cosano",
   "license": "MIT",
   "dependencies": {
+    "bittorrent-tracker": "^9.17.4",
     "cookie-parser": "^1.4.5",
     "express": "^4.17.1",
     "express-rate-limit": "^5.3.0",

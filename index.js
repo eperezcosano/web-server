@@ -1,14 +1,18 @@
-/*
-*  Todo: webtorrent
-* */
 const express = require('express')
 const http = require('http')
 const nunjucks = require('nunjucks')
 const mongoose = require('mongoose')
 const cookieParser = require('cookie-parser')
+const trackerServer = require('bittorrent-tracker').Server
 
 const MONGO_URI = 'mongodb://localhost/web-server'
 const port = 3000
+const trackerPort = 8000
+const hostname = {
+    http: '::',
+    udp4: '0.0.0.0',
+    udp6: '::'
+}
 
 const app = express()
 const server = http.createServer(app)
@@ -41,4 +45,47 @@ server.listen(port, () => {
     console.log('Listening on http://localhost:' + port)
 })
 
-
+const tracker = new trackerServer({
+    http: false,
+    interval: 60000,
+    stats: true,
+    trustProxy: false,
+    udp: true,
+    ws: true,
+    filter: function (infoHash, params, cb) {
+        console.log(infoHash, params.peer_id, params.port)
+        cb(null)
+        /*
+        if (!torrents.includes(infoHash)) {
+            console.log('Torrent not allowed', params.ip)
+            cb(new Error('Torrent not allowed'))
+        } else if (!ips.includes(params.ip)) {
+            console.log('IP not whitlisted', params.ip)
+            cb(new Error('IP not whitlisted'))
+        } else {
+            console.log(params)
+            cb(null)
+        }*/
+    }
+})
+tracker.on('error', err => {
+    console.error(`ERROR: ${err.message}`)
+})
+tracker.on('warning', err => {
+    console.log(`WARNING: ${err.message}`)
+})
+tracker.on('update', addr => {
+    console.log(`update: ${addr}`)
+})
+tracker.on('complete', addr => {
+    console.log(`complete: ${addr}`)
+})
+tracker.on('start', addr => {
+    console.log(`start: ${addr}`)
+})
+tracker.on('stop', addr => {
+    console.log(`stop: ${addr}`)
+})
+tracker.listen(trackerPort, hostname, () => {
+    console.log('Tracker online')
+})
