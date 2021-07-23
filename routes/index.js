@@ -17,7 +17,7 @@ const resendLimiter = rateLimit({
 })
 
 // Index page
-router.get('/', limiter, auth.verifyToken, indexController.getIndexPage)
+router.get('/', limiter, auth.verifyToken, homeController.home)
 router.post('/',
     limiter,
     [
