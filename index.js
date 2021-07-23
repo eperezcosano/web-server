@@ -1,7 +1,5 @@
 /*
-* TODO:
-*  Logout
-*  webtorrent
+*  Todo: webtorrent
 * */
 const express = require('express')
 const http = require('http')

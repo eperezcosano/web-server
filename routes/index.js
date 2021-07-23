@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const indexController = require('../controllers/index')
+const homeController = require('../controllers/home')
 const validator = require('../middlewares/validator')
 const auth = require('../middlewares/auth')
 const hcaptcha = require('../middlewares/hcaptcha')
@@ -57,7 +58,7 @@ router.post('/login',
     indexController.loginUser
 )
 
-//Activate account
+// Activate account
 router.get('/activate/:email/:code',
     limiter,
     [
@@ -67,7 +68,7 @@ router.get('/activate/:email/:code',
     indexController.loginUser
 )
 
-//Resend activation code
+// Resend activation code
 router.get('/resend/:email',
     resendLimiter,
     [
@@ -75,6 +76,12 @@ router.get('/resend/:email',
     ],
     validator.index,
     indexController.resendCode
+)
+
+// Logout
+router.get('/logout',
+    limiter,
+    homeController.logout
 )
 
 module.exports = router;
