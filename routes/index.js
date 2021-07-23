@@ -84,4 +84,15 @@ router.get('/logout',
     homeController.logout
 )
 
+// User profile
+router.get('/user/:uname',
+    limiter,
+    auth.verifyToken,
+    [
+        param('uname').isAlphanumeric()
+    ],
+    validator.home,
+    homeController.userProfile
+)
+
 module.exports = router;
