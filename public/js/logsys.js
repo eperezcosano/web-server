@@ -3,7 +3,8 @@
     'use strict'
 
     document.getElementById('email').focus()
-    //document.getElementById('uname').focus()
+    document.getElementById('uname').focus()
+    document.getElementById('pass').focus()
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
     let forms = document.querySelectorAll('.needs-validation')
 
