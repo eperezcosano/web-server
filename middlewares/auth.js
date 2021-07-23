@@ -7,7 +7,7 @@ function verifyToken(req, res, next) {
         return res.render('index')
     }
     try {
-        res.payload = jwt.verify(token, jwtSecret)
+        req.payload = jwt.verify(token, jwtSecret)
         next()
     } catch (e) {
         return res.render('index')
