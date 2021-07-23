@@ -21,7 +21,7 @@ const transporter = nodemailer.createTransport({
 })
 
 function getIndexPage(req, res) {
-    res.render('home')
+    res.render('home', {payload: req.payload})
 }
 
 /**
