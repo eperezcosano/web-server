@@ -41,7 +41,7 @@ mongoose.connect(MONGO_URI,
     process.exit(-1);
 })
 
-server.listen(port, () => {
+server.listen(port, 'localhost',() => {
     console.log('Listening on http://localhost:' + port)
 })
 
