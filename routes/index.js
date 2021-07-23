@@ -42,7 +42,7 @@ router.post(
             .isLength({min: 8})
             .withMessage('Minimum password length is 8.')
     ],
-    validator.index,
+    validator.register,
     hcaptcha.verify,
     indexController.registerUser
 )
@@ -53,8 +53,8 @@ router.post('/login',
     [
         body('email').isEmail().withMessage('Invalid email.').normalizeEmail()
     ],
-    validator.index,
     hcaptcha.verify,
+    validator.index,
     indexController.loginUser
 )
 
