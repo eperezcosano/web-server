@@ -358,7 +358,6 @@ async function resendCode(req, res) {
 }
 
 module.exports = {
-    getIndexPage,
     identifyUser,
     registerUser,
     loginUser,
