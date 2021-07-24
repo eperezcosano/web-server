@@ -45,10 +45,23 @@ server.listen(port, 'localhost',() => {
     console.log('Listening on http://localhost:' + port)
 })
 
+// TODO: stats
+// get info hashes for all torrents in the tracker server
+//Object.keys(server.torrents)
+
+// get the number of seeders for a particular torrent
+//server.torrents[infoHash].complete
+
+// get the number of leechers for a particular torrent
+//server.torrents[infoHash].incomplete
+
+// get the peers who are in a particular torrent swarm
+//server.torrents[infoHash].peers
+
 const tracker = new trackerServer({
     http: false,
     interval: 60000,
-    stats: true,
+    stats: false,
     trustProxy: false,
     udp: true,
     ws: true,
