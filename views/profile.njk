@@ -1,0 +1,19 @@
+{% macro profile(user) %}
+<div class="row justify-content-around">
+    <div class="card col-sm-3 cardinfo" style="width: 18rem; height: 375px;">
+        <div class="cardimg">
+            <img class="card-img-top" src="http://p90369go.bget.ru/inc/img/avatar/4.png" alt="avatar">
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{ user }}
+                {#
+                <?php if ($user->rol == "Admin"): ?>
+                <span class="badge badge-danger">Admin</span>
+                <?php endif; ?> #}
+            </h5>
+            <h6 class="card-subtitle mb-2 text-muted">Lorem ipsum</h6>
+            <p class="card-text"> Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        </div>
+    </div>
+</div>
+{% endmacro %}

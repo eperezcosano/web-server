@@ -8,7 +8,7 @@ function logout(req, res) {
 
 async function userProfile(req, res) {
     try {
-        return res.render('home', { payload: req.payload, alert: {type: 'info', msg: req.params.uname }})
+        return res.render('home', { payload: req.payload, user: req.params.uname })
     } catch (err) {
         // Database error
         console.error(err)
