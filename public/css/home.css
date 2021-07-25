@@ -1,7 +1,6 @@
 body {
     font-family: 'Quicksand' , serif;
-    background-color: #121212;
-    color: #eee;
+    background-color: #34495e;
 }
 
 #navbarNav {
@@ -18,6 +17,10 @@ body {
 .wrapper {
     width: 100%;
     height: 100vh;
+}
+
+.container {
+    padding-top: 50px;
 }
 
 .cardinfo {
