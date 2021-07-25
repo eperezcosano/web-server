@@ -6,10 +6,7 @@
         </div>
         <div class="card-body">
             <h5 class="card-title">{{ user }}
-                {#
-                <?php if ($user->rol == "Admin"): ?>
-                <span class="badge badge-danger">Admin</span>
-                <?php endif; ?> #}
+                <span class="badge bg-danger">Admin</span>
             </h5>
             <h6 class="card-subtitle mb-2 text-muted">Lorem ipsum</h6>
             <p class="card-text"> Some quick example text to build on the card title and make up the bulk of the card's content.</p>
@@ -28,7 +25,7 @@
             </div>
             <div class="">
                 {# if invitations #}
-                <table class="table table-hover">
+                <table class="table table-striped table-bordered table-hover">
                     <thead>
                     <tr>
                         <th>#</th>
@@ -60,7 +57,7 @@
                 Login Attempts
             </div>
             <div class="">
-                <table class="table table-hover">
+                <table class="table table-striped table-sm table-hover">
                     <thead>
                     <tr>
                         <th>#</th>
