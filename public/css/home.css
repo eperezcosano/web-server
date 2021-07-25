@@ -40,6 +40,11 @@ body {
     margin-left: 5px;
 }
 
+.cardinvinfo .badge,
+.cardloginfo .badge {
+    margin-right: 15px;
+}
+
 .cardimg {
     text-align: center;
     padding-top: 20px;
@@ -50,6 +55,6 @@ body {
 }
 
 table {
-    margin-bottom: 0;
+    margin-bottom: 0 !important;
     text-align: center;
 }
