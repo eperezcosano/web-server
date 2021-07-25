@@ -48,3 +48,8 @@ body {
 .card-img-top {
     width: 150px;
 }
+
+table {
+    margin-bottom: 0;
+    text-align: center;
+}
