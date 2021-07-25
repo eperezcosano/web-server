@@ -9,7 +9,7 @@ body {
 
 .search-input {
      width: 400px !important;
-     background: #212529 !important;
+     background: #2c3e50; !important;
      border: 1px solid #6d757d !important;
      color: #6d757d !important;
 }
