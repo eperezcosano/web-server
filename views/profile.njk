@@ -15,5 +15,78 @@
             <p class="card-text"> Some quick example text to build on the card title and make up the bulk of the card's content.</p>
         </div>
     </div>
+    <div class="col-sm-6">
+        {# if user admin #}
+        <div class="card cardinvinfo">
+            <div class="card-header">
+                <span class="badge badge-pill badge-primary">0</span>
+                Invitations
+                {# if admin #}
+                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#invite" style="float: right;">
+                    Send Invitation
+                </button>
+            </div>
+            <div class="">
+                {# if invitations #}
+                <table class="table table-condensed table-hover" style="display: none;">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Email</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope='row'>1</th>
+                            <td>lorem@ipsum</td>
+                            <td>01/01/2021</td>
+                            <td class='table-success'>Accepted</td>
+                        </tr>
+                        <tr>
+                            <th scope='row'>1</th>
+                            <td>lorem@ipsum</td>
+                            <td>01/01/2021</td>
+                            <td class='table-warning'>Pending</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card cardloginfo">
+            <div class="card-header">
+                <button type="button" class="close close-log" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <span class="badge badge-pill badge-warning">0</span>
+                Login Attempts
+            </div>
+            <div class="">
+                <table class="table table-condensed table-hover" style="display: none;">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>IP</th>
+                        <th>Date</th>
+                        <th>Access</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope='row'>1</th>
+                            <td>0.0.0.0</td>
+                            <td>01/01/2021</td>
+                            <td class='table-success'>Permitted</td>
+                        </tr>
+                        <tr>
+                            <th scope='row'>1</th>
+                            <td>0.0.0.0</td>
+                            <td>01/01/2021</td>
+                            <td class='table-danger'>Denied</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 {% endmacro %}
