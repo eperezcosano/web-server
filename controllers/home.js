@@ -1,3 +1,7 @@
+const mongoose = require("mongoose")
+require('../models/user')
+const User = mongoose.model('User')
+
 function home(req, res) {
     res.render('home', {payload: req.payload})
 }
@@ -8,7 +12,8 @@ function logout(req, res) {
 
 async function userProfile(req, res) {
     try {
-        return res.render('home', { payload: req.payload, user: req.params.uname })
+        const user = await User.findOne({"uname": req.params.uname})
+        return res.render('home', { payload: req.payload, user })
     } catch (err) {
         // Database error
         console.error(err)
