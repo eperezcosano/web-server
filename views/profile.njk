@@ -1,11 +1,15 @@
 {% macro profile(user) %}
 <div class="row justify-content-around">
-    <div class="card col-sm-3 cardinfo" style="width: 18rem; height: 375px;">
+    <div class="card col-sm-3 cardinfo">
         <div class="cardimg">
             <img class="card-img-top" src="/img/4.png" alt="avatar">
         </div>
         <div class="card-body">
-            <h5 class="card-title">{{ user.uname }} <span class="badge bg-danger">{{ user.rol }}</span></h5>
+            <h5 class="card-title">{{ user.uname }}
+                {% if user.rol === 'Admin' %}
+                <span class="badge bg-danger">Admin</span>
+                {% endif %}
+            </h5>
             <h6 class="card-subtitle mb-2 text-muted">{{ user.createdAt.toDateString().split(' ').slice(1).join(' ') }}</h6>
             <ul class="list-group">
                 <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -13,12 +17,12 @@
                     <span class="badge bg-secondary">0.9</span>
                 </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Uploaded &#x2197;
-                    <span class="badge bg-secondary">800 MB</span>
+                    Uploaded
+                    <span class="badge bg-secondary">&#x2197; 800 MB</span>
                 </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Downloaded &#x2198;
-                    <span class="badge bg-secondary">3 GB</span>
+                    Downloaded
+                    <span class="badge bg-secondary">&#x2198; 3 GB</span>
                 </li>
             </ul>
         </div>
