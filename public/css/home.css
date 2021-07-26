@@ -57,10 +57,7 @@ body {
 table {
     margin-bottom: 0 !important;
     text-align: center;
-    overflow: auto;
-    height: 100px;
 }
-table thead th {
-    position: sticky;
-    top: 0;
-}
+
+.tableFixHead          { overflow: auto; height: 100px; }
+.tableFixHead thead th { position: sticky; top: 0; z-index: 1; }
