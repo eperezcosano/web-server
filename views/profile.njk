@@ -76,7 +76,7 @@
                 <span class="badge rounded-pill bg-warning text-dark">{{ attempts.length }}</span>
                 Login Attempts
             </div>
-            {% if attempts > 0 %}
+            {% if attempts.length > 0 %}
             <div>
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
@@ -88,18 +88,19 @@
                     </tr>
                     </thead>
                     <tbody>
+                    {% for ip, createdAt, success in attempts %}
                         <tr>
-                            <th scope='row'>1</th>
-                            <td>0.0.0.0</td>
-                            <td>01/01/2021</td>
-                            <td class='table-success'>Permitted</td>
+                            <th scope='row'>{{ loop.index }}</th>
+                            <td>{{ ip }}</td>
+                            <td>{{ createdAt.toLocaleString() }}</td>
+                            {% if success %}
+                                <td class='table-success'>Permitted</td>
+                            {% else %}
+                                <td class='table-danger'>Denied</td>
+                            {% endif %}
+
                         </tr>
-                        <tr>
-                            <th scope='row'>1</th>
-                            <td>0.0.0.0</td>
-                            <td>01/01/2021</td>
-                            <td class='table-danger'>Denied</td>
-                        </tr>
+                    {% endfor %}
                     </tbody>
                 </table>
             </div>
