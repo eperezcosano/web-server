@@ -1,4 +1,6 @@
-{% macro profile(payload, user) %}
+{% macro profile(payload, user, invitations, attempts) %}
+    {{ invitations }}
+    {{ attempts }}
 <div class="row justify-content-around">
     <div class="card col-sm-3 cardinfo">
         <div class="cardimg">

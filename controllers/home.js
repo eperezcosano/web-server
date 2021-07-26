@@ -1,6 +1,10 @@
 const mongoose = require("mongoose")
 require('../models/user')
 const User = mongoose.model('User')
+require('../models/invitation')
+const Invitation = mongoose.model('Invitation')
+require('../models/login_attempt')
+const LoginAttempt = mongoose.model('LoginAttempt')
 
 function home(req, res) {
     res.render('home', {payload: req.payload})
@@ -14,7 +18,9 @@ async function userProfile(req, res) {
     try {
         const user = await User.findOne({"uname": req.params.uname})
         if (user) {
-            return res.render('home', { payload: req.payload, user })
+            const invitations = await Invitation.find({"referral": user._id })
+            const attempts = await LoginAttempt.find({"user_id": user._id})
+            return res.render('home', { payload: req.payload, user, invitations, attempts })
         } else {
             return res.render('home', { payload: req.payload, alert: { type: 'error', msg: 'User not found' }})
         }
