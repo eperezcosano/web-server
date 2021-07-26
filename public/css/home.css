@@ -58,3 +58,12 @@ table {
     margin-bottom: 0 !important;
     text-align: center;
 }
+table tbody, table thead
+{
+    display: block;
+}
+table tbody
+{
+    overflow: auto;
+    height: 100px;
+}
