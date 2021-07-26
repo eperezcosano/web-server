@@ -12,6 +12,8 @@
             </h5>
             <h6 class="card-subtitle mb-2 text-muted">{{ user.createdAt.toDateString().split(' ').slice(1).join(' ') }}</h6>
             <ul class="list-group">
+                {{ 'user' + user._id }}
+                {{ 'payload' + payload.id }}
                 {% if payload.rol === 'Admin' or user._id === payload.id %}
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         IP
