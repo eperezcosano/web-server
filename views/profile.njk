@@ -7,8 +7,8 @@
         <div class="card-body">
             <h5 class="card-title">{{ user.uname }}</h5>
             <span class="badge bg-danger">{{ user.rol }}</span>
-            <h6 class="card-subtitle mb-2 text-muted">{{ user.createdAt }}</h6>
-            <p class="card-text"> Lorem ipsum.</p>
+            <h6 class="card-subtitle mb-2 text-muted">{{ user.createdAt.toDateString().split(' ').slice(1).join(' ') }}</h6>
+            <p class="card-text">Lorem ipsum.</p>
         </div>
     </div>
     <div class="col-sm-6">
