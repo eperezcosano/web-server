@@ -88,17 +88,16 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for ip, createdAt, success in attempts %}
+                    {% for item in attempts %}
                         <tr>
                             <th scope='row'>{{ loop.index }}</th>
-                            <td>{{ ip }}</td>
-                            <td>{{ createdAt }}</td>
-                            {% if success %}
+                            <td>{{ item.ip }}</td>
+                            <td>{{ item.createdAt.toLocaleString() }}</td>
+                            {% if item.success %}
                                 <td class='table-success'>Permitted</td>
                             {% else %}
                                 <td class='table-danger'>Denied</td>
                             {% endif %}
-
                         </tr>
                     {% endfor %}
                     </tbody>
