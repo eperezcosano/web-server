@@ -18,7 +18,7 @@
     <div class="container">
         {{ forms.alert(alert) }}
         {% if user %}
-            {{ profile(user) }}
+            {{ profile(payload, user) }}
         {% else %}
         <h1>Home</h1>
         {% endif %}

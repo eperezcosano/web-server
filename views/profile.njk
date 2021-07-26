@@ -1,4 +1,4 @@
-{% macro profile(user) %}
+{% macro profile(payload, user) %}
 <div class="row justify-content-around">
     <div class="card col-sm-3 cardinfo">
         <div class="cardimg">
@@ -12,6 +12,12 @@
             </h5>
             <h6 class="card-subtitle mb-2 text-muted">{{ user.createdAt.toDateString().split(' ').slice(1).join(' ') }}</h6>
             <ul class="list-group">
+                {% if payload.rol === 'Admin' or user._id === payload._id %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        IP
+                        <span class="badge bg-secondary">{{ user.ip }}</span>
+                    </li>
+                {% endif %}
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     Ratio
                     <span class="badge bg-secondary">0.9</span>
@@ -28,12 +34,10 @@
         </div>
     </div>
     <div class="col-sm-6">
-        {# if user admin #}
         <div class="card cardinvinfo">
             <div class="card-header">
                 <span class="badge rounded-pill bg-primary">0</span>
                 Invitations
-                {# if admin #}
                 <button type="button" class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#invite" style="float: right;">
                     Send Invitation
                 </button>

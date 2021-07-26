@@ -61,8 +61,8 @@ function hash(password, salt) {
  * @param uname
  * @returns jwt
  */
-function generateJWT(id, email, uname) {
-    return jwt.sign({ id, email, uname }, jwtSecret, { expiresIn: jwtSeconds + 's' })
+function generateJWT(id, email, uname, rol) {
+    return jwt.sign({ id, email, uname, rol }, jwtSecret, { expiresIn: jwtSeconds + 's' })
 }
 /**
  * Identifies whether a User is registered or not
@@ -295,7 +295,7 @@ async function loginUser(req, res) {
         await att.save()
 
         // Generate jwt
-        const token = generateJWT(user._id, user.email, user.uname)
+        const token = generateJWT(user._id, user.email, user.uname, user.rol)
         res.cookie('token', token, { maxAge: jwtSeconds * 1000, httpOnly: true, secure: true})
 
         // Success login
