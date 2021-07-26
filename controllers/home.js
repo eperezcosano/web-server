@@ -16,7 +16,7 @@ async function userProfile(req, res) {
         if (user) {
             return res.render('home', { payload: req.payload, user })
         } else {
-            return res.render('home', { alert: { type: 'error', msg: 'User not found' }})
+            return res.render('home', { payload: req.payload, alert: { type: 'error', msg: 'User not found' }})
         }
     } catch (err) {
         // Database error
