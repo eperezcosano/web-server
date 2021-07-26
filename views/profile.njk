@@ -9,9 +9,18 @@
             <h6 class="card-subtitle mb-2 text-muted">{{ user.createdAt.toDateString().split(' ').slice(1).join(' ') }}</h6>
             <p class="card-text">Lorem ipsum.</p>
             <ul class="list-group">
-                <li class="list-group-item">Ratio:      <b>0.5</b></li>
-                <li class="list-group-item">&#x2197;:   <b>100 MB</b></li>
-                <li class="list-group-item">&#x2198;:   <b>1 GB</b></li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Ratio
+                    <span class="badge bg-secondary">0.9</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Uploaded &#x2197;
+                    <span class="badge bg-secondary">800 MB</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Downloaded &#x2198;
+                    <span class="badge bg-secondary">3 GB</span>
+                </li>
             </ul>
         </div>
     </div>
