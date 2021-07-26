@@ -13,7 +13,11 @@ function logout(req, res) {
 async function userProfile(req, res) {
     try {
         const user = await User.findOne({"uname": req.params.uname})
-        return res.render('home', { payload: req.payload, user })
+        if (user) {
+            return res.render('home', { payload: req.payload, user })
+        } else {
+            return res.render('home', { alert: { type: 'error', msg: 'User not found' }})
+        }
     } catch (err) {
         // Database error
         console.error(err)

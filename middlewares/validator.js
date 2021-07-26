@@ -29,7 +29,7 @@ function register(req, res, next) {
 function home(req, res, next) {
     const errors = getErrors(validationResult(req))
     if (errors) {
-        return res.render('home', { alert: { type: 'error', msg: 'Invalid parameter' }})
+        return res.render('home', { alert: { type: 'error', msg: 'User not found' }})
     } else {
         next()
     }

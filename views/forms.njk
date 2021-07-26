@@ -11,6 +11,7 @@
             <div>
                 {{ alert.msg }}
             </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     {% elseif alert.type === 'info' %}
         <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
@@ -23,6 +24,7 @@
             <div>
                 {{ alert.msg }}
             </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     {% elseif alert.type === 'success' %}
         <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
@@ -35,6 +37,7 @@
             <div>
                 {{ alert.msg }}
             </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     {% elseif alert.type === 'error' %}
         <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
@@ -47,6 +50,7 @@
             <div>
                 {{ alert.msg }}
             </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     {% endif %}
 {% endmacro %}
