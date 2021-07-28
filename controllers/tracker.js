@@ -7,7 +7,7 @@ const {trackerSecret} = require("../config");
 const Torrent = mongoose.model('Torrent')
 
 async function checkTorrent(infoHash, params, cb) {
-    console.log(params)
+
     const token = params.k
     if (!token) {
         return cb(new Error('Unauthorised.'))
@@ -25,12 +25,11 @@ async function checkTorrent(infoHash, params, cb) {
         }
         //TODO: update torrent stats and user
 
-        const user = await User.updateOne({"_id": payload.id}, {"clientIP": params.ip})
-        if (!user) {
+        const query = await User.updateOne({"_id": payload.id}, {"clientIP": params.ip})
+        if (query.ok !== 1) {
             return cb(new Error('Unauthorised.'))
         }
 
-        console.log('OK', user)
         return cb(null)
 
     } catch (err) {
