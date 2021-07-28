@@ -7,6 +7,7 @@ require('../models/login_attempt')
 const LoginAttempt = mongoose.model('LoginAttempt')
 const nodemailer = require('nodemailer')
 const {gmailUser, gmailPass} = require("../config")
+const fs = require('fs')
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -92,6 +93,15 @@ function addTorrent(req, res) {
     if (!req.files || Object.keys(req.files).length === 0) {
         return res.status(400).render('home', {payload: req.payload, add: true, alert: { type: 'error', msg: 'No files were uploaded.'}})
     }
+
+    let tFile = req.files.file
+
+    if (tFile.size > 102400 || tFile.mimetype !== 'application/x-bittorrent') {
+        fs.unlinkSync(tFile.tempFilePath)
+        return res.status(400).render('home', {payload: req.payload, add: true, alert: { type: 'error', msg: 'Invalid file.'}})
+    }
+
+    //application/x-bittorrent
     console.log(req.files.file)
     return res.json(req.body)
 }
