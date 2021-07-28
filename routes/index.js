@@ -95,4 +95,7 @@ router.get('/user/:uname',
     homeController.userProfile
 )
 
+// Invite
+router.post('/invite', resendLimiter, auth.verifyToken, homeController.invite)
+
 module.exports = router;

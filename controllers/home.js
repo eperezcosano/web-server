@@ -31,8 +31,13 @@ async function userProfile(req, res) {
     }
 }
 
+async function invite(req, res) {
+    return res.json(req.body)
+}
+
 module.exports = {
     home,
     logout,
-    userProfile
+    userProfile,
+    invite
 }

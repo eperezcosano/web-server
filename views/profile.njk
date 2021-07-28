@@ -34,6 +34,7 @@
         </div>
     </div>
     <div class="col-sm-6">
+        {% if payload.rol === 'Admin' or user._id == payload.id %}
         <div class="card cardinvinfo">
             <div class="card-header">
                 <span class="badge rounded-pill bg-primary">{{ invitations.length }}</span>
@@ -73,6 +74,7 @@
             </div>
             {% endif %}
         </div>
+        {% endif %}
         {% if payload.rol === 'Admin' %}
         <div class="card cardloginfo">
             <div class="card-header">
@@ -113,6 +115,7 @@
 <div class="modal fade" id="invite" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="inviteTitle" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
+            <form action="/invite" method="post">
             <div class="modal-header">
                 <h5 class="modal-title" id="inviteTitle">Send invitation</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -129,8 +132,9 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Send</button>
+                <button type="submit" class="btn btn-primary">Send</button>
             </div>
+            </form>
         </div>
     </div>
 </div>
