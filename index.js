@@ -4,7 +4,7 @@ const nunjucks = require('nunjucks')
 const mongoose = require('mongoose')
 const cookieParser = require('cookie-parser')
 const trackerServer = require('bittorrent-tracker').Server
-const trackerController = require('controllers/tracker')
+const trackerController = require('./controllers/tracker')
 
 const MONGO_URI = 'mongodb://localhost/web-server'
 const port = 3000
