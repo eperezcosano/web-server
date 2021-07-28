@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser')
 const fileUpload = require('express-fileupload')
 const trackerServer = require('bittorrent-tracker').Server
 const trackerController = require('./controllers/tracker')
-
+const path = require('path')
 const MONGO_URI = 'mongodb://localhost/web-server'
 const port = 3000
 const trackerPort = 8000
@@ -27,9 +27,8 @@ app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(fileUpload({
-    //limits: { fileSize: 50 * 1024 * 1024 },
-    //safeFileNames: true,
-    //abortOnLimit: true,
+    useTempFiles: true,
+    tempFileDir: path.join(__dirname,'tmp'),
     debug: true
 }))
 app.use(express.static('public'))
