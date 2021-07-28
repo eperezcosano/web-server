@@ -59,5 +59,7 @@ table {
     text-align: center;
 }
 
-.tableFixHead          { overflow: auto; height: 100px; }
+/*.tableFixHead          { overflow: auto; height: 100px; }
 .tableFixHead thead th { position: sticky; top: 0; z-index: 1; background: #fff; border: 1px solid #fff }
+*/
+
