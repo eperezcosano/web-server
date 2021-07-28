@@ -5,6 +5,16 @@ require('../models/invitation')
 const Invitation = mongoose.model('Invitation')
 require('../models/login_attempt')
 const LoginAttempt = mongoose.model('LoginAttempt')
+const nodemailer = require('nodemailer')
+const {gmailUser, gmailPass} = require("../config")
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: gmailUser,
+        pass: gmailPass
+    }
+})
+
 
 function home(req, res) {
     res.render('home', {payload: req.payload})
@@ -32,7 +42,44 @@ async function userProfile(req, res) {
 }
 
 async function invite(req, res) {
-    return res.json(req.body)
+    try {
+        if (req.payload.rol !== 'Admin') {
+            return res.render('home', { payload: req.payload, alert: { type: 'error', msg: 'You do not have permissions.'} })
+        }
+        const email = req.body.destEmail
+        const msg = req.body.msg ? 'Message: ' + req.body.msg : ''
+        const isInvited = await Invitation.countDocuments({"email": email})
+
+        if (isInvited > 0) {
+            return res.render('home', { payload: req.payload, alert: { type: 'error', msg: 'User already invited.'} })
+        }
+
+        const invitation = new Invitation({
+            referral: req.payload.id,
+            email: email
+        })
+
+        // Send email
+        const mailOptions = {
+            from: '"Lufo" <' + gmailUser + '>',
+            to: email,
+            subject: 'Invitation to Lufo',
+            text: 'Hello, you have received an invitation to Lufo! https://lufo.ml/',
+            html: "Hello, you have received an invitation to Lufo!<br>" +
+                "You have been invited by: <b>" + req.payload.uname + "</b><br>" +
+                msg + "<br>" +
+                "<a href='https://lufo.ml/'>https://lufo.ml/</a>"
+        }
+        await transporter.sendMail(mailOptions)
+
+        // Save it in the database
+        await invitation.save()
+
+    } catch (err) {
+        // Database error
+        console.error(err)
+        return res.status(500).render('home', { payload: req.payload, alert: { type: 'warning', msg: 'Internal error. Please try again later...'} })
+    }
 }
 
 module.exports = {
