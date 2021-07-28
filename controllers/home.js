@@ -88,8 +88,11 @@ function addTorrentPage(req, res) {
     return res.render('home', {payload: req.payload, add: true })
 }
 
-async function addTorrent(req, res) {
-    console.log(req.files)
+function addTorrent(req, res) {
+    if (!req.files || Object.keys(req.files).length === 0) {
+        return res.status(400).render('home', {payload: req.payload, add: true, alert: { type: 'error', msg: 'No files were uploaded.'}})
+    }
+    console.log(req.files.file)
     return res.json(req.body)
 }
 
