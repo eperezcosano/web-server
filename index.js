@@ -4,6 +4,7 @@ const nunjucks = require('nunjucks')
 const mongoose = require('mongoose')
 const cookieParser = require('cookie-parser')
 const trackerServer = require('bittorrent-tracker').Server
+const trackerController = require('controllers/tracker')
 
 const MONGO_URI = 'mongodb://localhost/web-server'
 const port = 3000
@@ -65,21 +66,7 @@ const tracker = new trackerServer({
     trustProxy: false,
     udp: true,
     ws: true,
-    filter: function (infoHash, params, cb) {
-        console.log(infoHash, params.peer_id, params.port)
-        cb(null)
-        /*
-        if (!torrents.includes(infoHash)) {
-            console.log('Torrent not allowed', params.ip)
-            cb(new Error('Torrent not allowed'))
-        } else if (!ips.includes(params.ip)) {
-            console.log('IP not whitlisted', params.ip)
-            cb(new Error('IP not whitlisted'))
-        } else {
-            console.log(params)
-            cb(null)
-        }*/
-    }
+    filter: trackerController.checkTorrent
 })
 tracker.on('error', err => {
     console.error(`ERROR: ${err.message}`)
