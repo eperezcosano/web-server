@@ -13,7 +13,7 @@ const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 100
 })
-const fileUpload = fileUpload({
+const fileHandler = fileUpload({
     useTempFiles: true,
     tempFileDir: path.join(__dirname,'tmp'),
     debug: true
@@ -108,6 +108,6 @@ router.post('/invite', resendLimiter, auth.verifyToken, homeController.invite)
 
 // Add torrent
 router.get('/add', limiter, auth.verifyToken, homeController.addTorrentPage)
-router.post('/add', limiter, auth.verifyToken, fileUpload, homeController.addTorrent)
+router.post('/add', limiter, auth.verifyToken, fileHandler, homeController.addTorrent)
 
 module.exports = router;
