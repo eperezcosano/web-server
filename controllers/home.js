@@ -132,10 +132,13 @@ function addTorrent(req, res) {
         torrent.createdBy = req.payload.uname
         torrent.created = new Date()
 
-        res.render('home', {payload: req.payload, add: true, alert: {type: 'success', msg: 'Torrent registered.'}})
-        res.setHeader('Content-disposition', 'attachment; filename=' + name)
-        res.setHeader('Content-type', 'application/x-bittorrent')
-        res.end(parseTorrent.toTorrentFile(torrent))
+        res.render('home', {payload: req.payload, add: true, alert: {type: 'success', msg: 'Torrent registered.'}}, function (err, html) {
+            res.send(html)
+            res.setHeader('Content-disposition', 'attachment; filename=' + name)
+            res.setHeader('Content-type', 'application/x-bittorrent')
+            res.end(parseTorrent.toTorrentFile(torrent))
+        })
+
     } catch (err) {
         console.error(err)
         return res.status(500).render('home', { payload: req.payload, add: true, alert: { type: 'warning', msg: 'Internal error. Please try again later...'} })
