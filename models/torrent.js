@@ -9,12 +9,16 @@ const torrentSchema = new mongoose.Schema({
             type: String,
             required: true
         },
+        title: {
+            type: String,
+            required: false
+        },
         description: {
             type: String,
             required: false
         },
         file: {
-            type: String,
+            type: Buffer,
             required: true
         },
         length: {

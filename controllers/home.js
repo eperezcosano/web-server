@@ -5,11 +5,11 @@ require('../models/invitation')
 const Invitation = mongoose.model('Invitation')
 require('../models/login_attempt')
 const LoginAttempt = mongoose.model('LoginAttempt')
+require('../models/torrent')
+const Torrent = mongoose.model('Torrent')
 const nodemailer = require('nodemailer')
 const {gmailUser, gmailPass} = require("../config")
 const parseTorrent = require('parse-torrent')
-const fs = require('fs')
-const {parse} = require("nunjucks/src/parser");
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -91,7 +91,7 @@ function addTorrentPage(req, res) {
     return res.render('home', {payload: req.payload, add: true })
 }
 
-function addTorrent(req, res) {
+async function addTorrent(req, res) {
     try {
 
         if (!req.files || Object.keys(req.files).length === 0) {
@@ -102,27 +102,14 @@ function addTorrent(req, res) {
             })
         }
 
-        console.log(req.files.file)
         const tFile = req.files.file
 
         if (tFile.size > 102400 || tFile.mimetype !== 'application/x-bittorrent') {
-            //fs.unlinkSync(tFile.tempFilePath)
             return res.status(400).render('home', {
                 payload: req.payload,
                 add: true,
                 alert: {type: 'error', msg: 'Invalid file.'}
             })
-        }
-
-        const name = req.body.name ? req.body.name : tFile.name
-        const desc = req.body.desc
-        const torrentConfig = {
-            name: name,
-            comment: 'Private torrent from Lufo.ml',
-            createdBy: req.payload.uname,
-            private: true,
-            announceList: [['udp://lufo.ml:8000'], ['ws://lufo.ml:8000']]
-            //info: 'this is a test'
         }
 
         let torrent = parseTorrent(tFile.data)
@@ -132,12 +119,25 @@ function addTorrent(req, res) {
         torrent.createdBy = req.payload.uname
         torrent.created = new Date()
 
-        res.render('home', {payload: req.payload, add: true, alert: {type: 'success', msg: 'Torrent registered.'}}, function (err, html) {
-            //res.send(html)
-            res.setHeader('Content-disposition', 'attachment; filename=' + name)
-            res.setHeader('Content-type', 'application/x-bittorrent')
-            res.end(parseTorrent.toTorrentFile(torrent))
+        const title = req.body.name
+        const desc = req.body.desc
+        const buffer = parseTorrent.toTorrentFile(torrent)
+
+        const instance = new Torrent({
+            infoHash: torrent.infoHash,
+            name: torrent.name,
+            title: title,
+            description: desc,
+            file: buffer,
+            length: torrent.length,
+            owner: req.payload.id
         })
+
+        await instance.save()
+
+        res.setHeader('Content-disposition', 'attachment; filename=' + name)
+        res.setHeader('Content-type', 'application/x-bittorrent')
+        res.end(parseTorrent.toTorrentFile(torrent))
 
     } catch (err) {
         console.error(err)
