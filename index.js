@@ -3,10 +3,8 @@ const http = require('http')
 const nunjucks = require('nunjucks')
 const mongoose = require('mongoose')
 const cookieParser = require('cookie-parser')
-const fileUpload = require('express-fileupload')
 const trackerServer = require('bittorrent-tracker').Server
 const trackerController = require('./controllers/tracker')
-const path = require('path')
 const MONGO_URI = 'mongodb://localhost/web-server'
 const port = 3000
 const trackerPort = 8000
@@ -26,11 +24,6 @@ nunjucks.configure('views', {autoescape: true, express: app})
 app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
-app.use(fileUpload({
-    useTempFiles: true,
-    tempFileDir: path.join(__dirname,'tmp'),
-    debug: true
-}))
 app.use(express.static('public'))
 app.use('/', router)
 

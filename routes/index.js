@@ -6,9 +6,17 @@ const auth = require('../middlewares/auth')
 const hcaptcha = require('../middlewares/hcaptcha')
 const { body, param } = require('express-validator')
 const rateLimit = require('express-rate-limit')
+const fileUpload = require("express-fileupload")
+const path = require("path")
+
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 100
+})
+const fileUpload = fileUpload({
+    useTempFiles: true,
+    tempFileDir: path.join(__dirname,'tmp'),
+    debug: true
 })
 const resendLimiter = rateLimit({
     windowMs: 30 * 60 * 1000,
@@ -100,6 +108,6 @@ router.post('/invite', resendLimiter, auth.verifyToken, homeController.invite)
 
 // Add torrent
 router.get('/add', limiter, auth.verifyToken, homeController.addTorrentPage)
-router.post('/add', limiter, auth.verifyToken, homeController.addTorrent)
+router.post('/add', limiter, auth.verifyToken, fileUpload, homeController.addTorrent)
 
 module.exports = router;
