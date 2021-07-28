@@ -75,6 +75,8 @@ async function invite(req, res) {
         // Save it in the database
         await invitation.save()
 
+        return res.render('home', {payload: req.payload, alert: { type: 'success', msg: 'Invitation sent.'} })
+
     } catch (err) {
         // Database error
         console.error(err)
