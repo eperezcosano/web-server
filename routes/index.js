@@ -20,7 +20,8 @@ const fileHandler = fileUpload({
     /*
     useTempFiles: false,
     tempFileDir: path.join(__dirname, '../tmp'),
-    debug: false*/
+    debug: false
+    */
 })
 const resendLimiter = rateLimit({
     windowMs: 30 * 60 * 1000,

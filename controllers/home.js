@@ -7,7 +7,9 @@ require('../models/login_attempt')
 const LoginAttempt = mongoose.model('LoginAttempt')
 const nodemailer = require('nodemailer')
 const {gmailUser, gmailPass} = require("../config")
+const parseTorrent = require('parse-torrent')
 const fs = require('fs')
+const {parse} = require("nunjucks/src/parser");
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -95,13 +97,26 @@ function addTorrent(req, res) {
     }
 
     console.log(req.files.file)
-    let tFile = req.files.file
+    const tFile = req.files.file
 
     if (tFile.size > 102400 || tFile.mimetype !== 'application/x-bittorrent') {
         //fs.unlinkSync(tFile.tempFilePath)
         return res.status(400).render('home', {payload: req.payload, add: true, alert: { type: 'error', msg: 'Invalid file.'}})
     }
 
+    const name = req.body.name ? req.body.name : tFile.name
+    const desc = req.body.desc
+    const torrentConfig = {
+        name: name,
+        comment: 'Private torrent from Lufo.ml',
+        createdBy: req.payload.uname,
+        private: true,
+        announceList: [['udp://lufo.ml:8000'], ['ws://lufo.ml:8000']]
+        //info: 'this is a test'
+    }
+
+    let out = parseTorrent(tFile.data)
+    console.log(out)
     return res.json(req.body)
 }
 
