@@ -133,7 +133,7 @@ function addTorrent(req, res) {
         torrent.created = new Date()
 
         res.render('home', {payload: req.payload, add: true, alert: {type: 'success', msg: 'Torrent registered.'}}, function (err, html) {
-            res.send(html)
+            //res.send(html)
             res.setHeader('Content-disposition', 'attachment; filename=' + name)
             res.setHeader('Content-type', 'application/x-bittorrent')
             res.end(parseTorrent.toTorrentFile(torrent))
