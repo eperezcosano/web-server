@@ -115,9 +115,14 @@ function addTorrent(req, res) {
         //info: 'this is a test'
     }
 
-    let out = parseTorrent(tFile.data)
-    console.log(out)
-    return res.json(req.body)
+    let torrent = parseTorrent(tFile.data)
+    torrent.private = true
+    torrent.announce = ['udp://lufo.ml:8000', 'ws://lufo.ml:8000']
+    torrent.comment = 'Private torrent from Lufo.ml'
+    torrent.createdBy = req.payload.uname
+    torrent.created = new Date()
+
+    return res.download(parseTorrent.toTorrentFile(torrent), name)
 }
 
 module.exports = {
