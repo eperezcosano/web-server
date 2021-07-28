@@ -27,9 +27,9 @@ app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(fileUpload({
-    limits: { fileSize: 50 * 1024 * 1024 },
-    safeFileNames: true,
-    abortOnLimit: true,
+    //limits: { fileSize: 50 * 1024 * 1024 },
+    //safeFileNames: true,
+    //abortOnLimit: true,
     debug: true
 }))
 app.use(express.static('public'))
