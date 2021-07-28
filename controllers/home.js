@@ -92,39 +92,54 @@ function addTorrentPage(req, res) {
 }
 
 function addTorrent(req, res) {
-    if (!req.files || Object.keys(req.files).length === 0) {
-        return res.status(400).render('home', {payload: req.payload, add: true, alert: { type: 'error', msg: 'No files were uploaded.'}})
+    try {
+
+        if (!req.files || Object.keys(req.files).length === 0) {
+            return res.status(400).render('home', {
+                payload: req.payload,
+                add: true,
+                alert: {type: 'error', msg: 'No files were uploaded.'}
+            })
+        }
+
+        console.log(req.files.file)
+        const tFile = req.files.file
+
+        if (tFile.size > 102400 || tFile.mimetype !== 'application/x-bittorrent') {
+            //fs.unlinkSync(tFile.tempFilePath)
+            return res.status(400).render('home', {
+                payload: req.payload,
+                add: true,
+                alert: {type: 'error', msg: 'Invalid file.'}
+            })
+        }
+
+        const name = req.body.name ? req.body.name : tFile.name
+        const desc = req.body.desc
+        const torrentConfig = {
+            name: name,
+            comment: 'Private torrent from Lufo.ml',
+            createdBy: req.payload.uname,
+            private: true,
+            announceList: [['udp://lufo.ml:8000'], ['ws://lufo.ml:8000']]
+            //info: 'this is a test'
+        }
+
+        let torrent = parseTorrent(tFile.data)
+        torrent.private = true
+        torrent.announce = ['udp://lufo.ml:8000', 'ws://lufo.ml:8000']
+        torrent.comment = 'Private torrent from Lufo.ml'
+        torrent.createdBy = req.payload.uname
+        torrent.created = new Date()
+
+        res.render('home', {payload: req.payload, add: true, alert: {type: 'success', msg: 'Torrent registered.'}})
+        res.setHeader('Content-disposition', 'attachment; filename=' + name)
+        res.setHeader('Content-type', 'application/x-bittorrent')
+        res.end(parseTorrent.toTorrentFile(torrent))
+    } catch (err) {
+        console.error(err)
+        return res.status(500).render('home', { payload: req.payload, add: true, alert: { type: 'warning', msg: 'Internal error. Please try again later...'} })
     }
-
-    console.log(req.files.file)
-    const tFile = req.files.file
-
-    if (tFile.size > 102400 || tFile.mimetype !== 'application/x-bittorrent') {
-        //fs.unlinkSync(tFile.tempFilePath)
-        return res.status(400).render('home', {payload: req.payload, add: true, alert: { type: 'error', msg: 'Invalid file.'}})
-    }
-
-    const name = req.body.name ? req.body.name : tFile.name
-    const desc = req.body.desc
-    const torrentConfig = {
-        name: name,
-        comment: 'Private torrent from Lufo.ml',
-        createdBy: req.payload.uname,
-        private: true,
-        announceList: [['udp://lufo.ml:8000'], ['ws://lufo.ml:8000']]
-        //info: 'this is a test'
-    }
-
-    let torrent = parseTorrent(tFile.data)
-    torrent.private = true
-    torrent.announce = ['udp://lufo.ml:8000', 'ws://lufo.ml:8000']
-    torrent.comment = 'Private torrent from Lufo.ml'
-    torrent.createdBy = req.payload.uname
-    torrent.created = new Date()
-
-    res.setHeader('Content-disposition', 'attachment; filename=' + name)
-    res.setHeader('Content-type', 'application/x-bittorrent')
-    res.end(parseTorrent.toTorrentFile(torrent))
 }
 
 module.exports = {
