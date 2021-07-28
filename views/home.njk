@@ -19,7 +19,7 @@
         {{ forms.alert(alert) }}
         {% if user %}
             {{ profile(payload, user, invitations, attempts) }}
-        {% else if add %}
+        {% elseif add %}
             <h1>ADD</h1>
         {% else %}
         <h1>Home</h1>
