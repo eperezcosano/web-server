@@ -119,7 +119,7 @@ async function addTorrent(req, res) {
         torrent.createdBy = req.payload.uname
         torrent.created = new Date()
 
-        const title = req.body.name
+        const title = req.body.title
         const desc = req.body.desc
         const buffer = parseTorrent.toTorrentFile(torrent)
 
