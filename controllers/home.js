@@ -94,15 +94,14 @@ function addTorrent(req, res) {
         return res.status(400).render('home', {payload: req.payload, add: true, alert: { type: 'error', msg: 'No files were uploaded.'}})
     }
 
+    console.log(req.files.file)
     let tFile = req.files.file
 
     if (tFile.size > 102400 || tFile.mimetype !== 'application/x-bittorrent') {
-        fs.unlinkSync(tFile.tempFilePath)
+        //fs.unlinkSync(tFile.tempFilePath)
         return res.status(400).render('home', {payload: req.payload, add: true, alert: { type: 'error', msg: 'Invalid file.'}})
     }
 
-    //application/x-bittorrent
-    console.log(req.files.file)
     return res.json(req.body)
 }
 
