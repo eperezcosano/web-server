@@ -124,7 +124,7 @@ function addTorrent(req, res) {
 
     res.setHeader('Content-disposition', 'attachment; filename=' + name)
     res.setHeader('Content-type', 'application/x-bittorrent')
-    let file = fs.createReadStream(parseTorrent.toTorrentFile(torrent))
+    let file = fs.createReadStream(torrent)
     file.pipe(res)
 }
 
