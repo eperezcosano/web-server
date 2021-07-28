@@ -57,18 +57,18 @@
                     </tr>
                     </thead>
                     <tbody>
+                    {% for item in invitations %}
                         <tr>
-                            <th scope='row'>1</th>
-                            <td>lorem@ipsum</td>
-                            <td>01/01/2021</td>
-                            <td class='table-success'>Accepted</td>
+                            <th scope='row'>{{ loop.index }}</th>
+                            <td>{{ item.email }}</td>
+                            <td>{{ item.createdAt.toLocaleString() }}</td>
+                            {% if item.accepted %}
+                                <td class='table-success'>Accepted</td>
+                            {% else %}
+                                <td class='table-warning'>Pending</td>
+                            {% endif %}
                         </tr>
-                        <tr>
-                            <th scope='row'>1</th>
-                            <td>lorem@ipsum</td>
-                            <td>01/01/2021</td>
-                            <td class='table-warning'>Pending</td>
-                        </tr>
+                    {% endfor %}
                     </tbody>
                 </table>
             </div>
