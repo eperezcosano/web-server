@@ -89,6 +89,7 @@ function addTorrentPage(req, res) {
 }
 
 async function addTorrent(req, res) {
+    console.log(req.files.file)
     return res.json(req.body)
 }
 
