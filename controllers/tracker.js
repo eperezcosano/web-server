@@ -2,25 +2,40 @@ const mongoose = require("mongoose")
 require('../models/user')
 const User = mongoose.model('User')
 require('../models/torrent')
+const jwt = require("jsonwebtoken");
+const {trackerSecret} = require("../config");
 const Torrent = mongoose.model('Torrent')
 
 async function checkTorrent(infoHash, params, cb) {
+    console.log(params)
+    const token = params.k
+    if (!token) {
+        return cb(new Error('Unauthorised.'))
+    }
     try {
-        console.log(params)
+        const payload = jwt.verify(token, trackerSecret)
+
+        if (payload.torrent !== infoHash) {
+            return cb(new Error('Torrent not registered.'))
+        }
+
         const torrent = await Torrent.findOne({"infoHash": infoHash})
         if (!torrent) {
-            cb(new Error('Torrent denied'))
-        } else {
-            const ip = await User.findOne({"ip": params.ip})
-            if (!ip) {
-                cb(new Error('IP not whitelisted'))
-            } else {
-                console.log('OK')
-                cb(null)
-            }
+            return cb(new Error('Torrent not registered.'))
         }
+        //TODO: update torrent stats and user
+
+        const user = await User.updateOne({"_id": payload.id}, {"clientIP": params.ip})
+        if (!user) {
+            return cb(new Error('Unauthorised.'))
+        }
+
+        console.log('OK', user)
+        return cb(null)
+
     } catch (err) {
-        cb(new Error('Internal error'))
+        console.log(err)
+        return cb(new Error('Unauthorised.'))
     }
 }
 

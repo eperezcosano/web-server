@@ -18,6 +18,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    clientIP: {
+        type: String,
+        required: false
+    },
     activation: {
         type: Boolean,
         default: false

@@ -8,8 +8,10 @@ const LoginAttempt = mongoose.model('LoginAttempt')
 require('../models/torrent')
 const Torrent = mongoose.model('Torrent')
 const nodemailer = require('nodemailer')
-const {gmailUser, gmailPass} = require("../config")
+const {gmailUser, gmailPass, trackerSecret} = require("../config")
 const parseTorrent = require('parse-torrent')
+const jwt = require("jsonwebtoken")
+
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -113,9 +115,10 @@ async function addTorrent(req, res) {
         }
 
         let torrent = parseTorrent(tFile.data)
+        const token = jwt.sign({ id: req.payload.id, torrent: torrent.infoHash }, trackerSecret)
         console.log(torrent)
         torrent.private = true
-        torrent.announce = ['udp://lufo.ml:8000', 'ws://lufo.ml:8000']
+        torrent.announce = ['http://lufo.ml:8000/announce?k=' + token, 'ws://lufo.ml:8000']
         torrent.comment = 'Private torrent from Lufo.ml'
         torrent.createdBy = req.payload.uname
         torrent.created = new Date()
