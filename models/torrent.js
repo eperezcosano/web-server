@@ -3,7 +3,8 @@ const mongoose = require('mongoose')
 const torrentSchema = new mongoose.Schema({
         infoHash: {
             type: String,
-            required: true
+            required: true,
+            unique: true
         },
         name: {
             type: String,
