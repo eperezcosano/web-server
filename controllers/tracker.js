@@ -9,13 +9,15 @@ async function checkTorrent(infoHash, params, cb) {
         const torrent = await Torrent.findOne({"infoHash": infoHash})
         if (!torrent) {
             cb(new Error('Torrent denied'))
+        } else {
+            const ip = await User.findOne({"ip": params.ip})
+            if (!ip) {
+                cb(new Error('IP not whitelisted'))
+            } else {
+                console.log('OK', params)
+                cb(null)
+            }
         }
-        const ip = await User.findOne({"ip": params.ip})
-        if (!ip) {
-            cb(new Error('IP not whitelisted'))
-        }
-        console.log('OK', params)
-        cb(null)
     } catch (err) {
         cb(new Error('Internal error'))
     }
