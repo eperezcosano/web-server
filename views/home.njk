@@ -1,6 +1,7 @@
 {% import 'header.njk' as header %}
 {% import 'forms.njk' as forms %}
 {% from 'profile.njk' import profile %}
+{% import 'addtorrent.njk' as addtorrent %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,7 +21,7 @@
         {% if user %}
             {{ profile(payload, user, invitations, attempts) }}
         {% elseif add %}
-            <h1>ADD</h1>
+            {{ addtorrent.form(payload) }}
         {% else %}
         <h1>Home</h1>
         {% endif %}
