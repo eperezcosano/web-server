@@ -92,7 +92,7 @@
                 <tbody>
                 {% for item in attempts %}
                     <tr>
-                        <th scope='row'>{{ loop.index }}</th>
+                        <th scope='row'>{{ loop.revindex }}</th>
                         <td>{{ item.ip }}</td>
                         <td>{{ item.createdAt.toLocaleString() }}</td>
                         {% if item.success %}
