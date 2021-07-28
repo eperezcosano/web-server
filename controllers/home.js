@@ -122,7 +122,10 @@ function addTorrent(req, res) {
     torrent.createdBy = req.payload.uname
     torrent.created = new Date()
 
-    return res.download(parseTorrent.toTorrentFile(torrent), name)
+    res.setHeader('Content-disposition', 'attachment; filename=' + name)
+    res.setHeader('Content-type', 'application/x-bittorrent')
+    let file = fs.createReadStream(parseTorrent.toTorrentFile(torrent))
+    file.pipe(res)
 }
 
 module.exports = {

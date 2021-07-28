@@ -15,9 +15,9 @@ const limiter = rateLimit({
 })
 const fileHandler = fileUpload({
     limits: { fileSize: 102400 },
-    safeFileNames: true,
     abortOnLimit: true
     /*
+    safeFileNames: true,
     useTempFiles: false,
     tempFileDir: path.join(__dirname, '../tmp'),
     debug: false
