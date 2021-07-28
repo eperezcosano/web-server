@@ -59,11 +59,11 @@ server.listen(port, 'localhost',() => {
 //server.torrents[infoHash].peers
 
 const tracker = new trackerServer({
-    http: false,
+    http: true,
     interval: 60000,
     stats: false,
     trustProxy: false,
-    udp: true,
+    udp: false,
     ws: true,
     filter: trackerController.checkTorrent
 })
