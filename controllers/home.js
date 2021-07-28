@@ -84,8 +84,12 @@ async function invite(req, res) {
     }
 }
 
-async function addTorrentPage(req, res) {
+function addTorrentPage(req, res) {
     return res.render('home', {payload: req.payload, add: true })
+}
+
+async function addTorrent(req, res) {
+    return res.json(req.body)
 }
 
 module.exports = {
@@ -93,5 +97,6 @@ module.exports = {
     logout,
     userProfile,
     invite,
-    addTorrentPage
+    addTorrentPage,
+    addTorrent
 }

@@ -100,5 +100,6 @@ router.post('/invite', resendLimiter, auth.verifyToken, homeController.invite)
 
 // Add torrent
 router.get('/add', limiter, auth.verifyToken, homeController.addTorrentPage)
+router.post('/add', limiter, auth.verifyToken, homeController.addTorrent)
 
 module.exports = router;
