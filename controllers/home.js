@@ -135,7 +135,7 @@ async function addTorrent(req, res) {
 
         await instance.save()
 
-        res.setHeader('Content-disposition', 'attachment; filename=' + name)
+        res.setHeader('Content-disposition', 'attachment; filename=' + tFile.name)
         res.setHeader('Content-type', 'application/x-bittorrent')
         res.end(parseTorrent.toTorrentFile(torrent))
 
