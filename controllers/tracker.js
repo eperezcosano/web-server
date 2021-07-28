@@ -6,6 +6,7 @@ const Torrent = mongoose.model('Torrent')
 
 async function checkTorrent(infoHash, params, cb) {
     try {
+        console.log(params)
         const torrent = await Torrent.findOne({"infoHash": infoHash})
         if (!torrent) {
             cb(new Error('Torrent denied'))
@@ -14,7 +15,7 @@ async function checkTorrent(infoHash, params, cb) {
             if (!ip) {
                 cb(new Error('IP not whitelisted'))
             } else {
-                console.log('OK', params)
+                console.log('OK')
                 cb(null)
             }
         }
