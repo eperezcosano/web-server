@@ -30,7 +30,7 @@ async function userProfile(req, res) {
         if (user) {
             const invitations = await Invitation.find({"referral": user._id })
             invitations.forEach( item => {
-                let out = User.find({"email": item.email}, {"activation": 1})
+                let out = User.findOne({"email": item.email}, "activation")
                 console.log(item.email, out)
             })
             const attempts = await LoginAttempt.find({"user_id": user._id}).sort({createdAt: -1})
