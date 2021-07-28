@@ -29,10 +29,6 @@ async function userProfile(req, res) {
         const user = await User.findOne({"uname": req.params.uname})
         if (user) {
             const invitations = await Invitation.find({"referral": user._id })
-            for (const item in invitations) {
-                let out = await User.findOne({"email": item.email}, "activation")
-                console.log(item.email, out)
-            }
             const attempts = await LoginAttempt.find({"user_id": user._id}).sort({createdAt: -1})
             return res.render('home', { payload: req.payload, user, invitations, attempts })
         } else {

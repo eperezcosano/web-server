@@ -53,7 +53,6 @@
                         <th>#</th>
                         <th>Email</th>
                         <th>Date</th>
-                        <th>Status</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -62,11 +61,6 @@
                             <th scope='row'>{{ loop.index }}</th>
                             <td>{{ item.email }}</td>
                             <td>{{ item.createdAt.toLocaleString() }}</td>
-                            {% if item.accepted %}
-                                <td class='table-success'>Accepted</td>
-                            {% else %}
-                                <td class='table-warning'>Pending</td>
-                            {% endif %}
                         </tr>
                     {% endfor %}
                     </tbody>
