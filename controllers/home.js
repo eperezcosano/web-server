@@ -113,6 +113,7 @@ async function addTorrent(req, res) {
         }
 
         let torrent = parseTorrent(tFile.data)
+        console.log(torrent)
         torrent.private = true
         torrent.announce = ['udp://lufo.ml:8000', 'ws://lufo.ml:8000']
         torrent.comment = 'Private torrent from Lufo.ml'
