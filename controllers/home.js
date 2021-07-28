@@ -31,6 +31,7 @@ async function userProfile(req, res) {
             const invitations = await Invitation.find({"referral": user._id })
             invitations.map( item => {
                 item.accepted = User.find({"email": item.email}, {"activation": 1})
+                console.log(item.email, item.accepted)
                 return item
             })
             const attempts = await LoginAttempt.find({"user_id": user._id}).sort({createdAt: -1})
