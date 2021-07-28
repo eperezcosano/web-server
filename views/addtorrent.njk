@@ -1,7 +1,7 @@
 {% macro form(payload) %}
-    <div class="card border-dark" style="width: 700px">
+    <div class="card" style="width: 700px">
         <div class="card-header">Register torrent</div>
-        <div class="card-body text-dark">
+        <div class="card-body">
             <form>
                 <div class="form-group row mb-3">
                     <label for="name" class="col-sm-2 col-form-label">Name</label>
@@ -21,7 +21,7 @@
                         <input type="file" name="file" class="form-control-file" id="file" required>
                     </div>
                 </div>
-                <div class="form-group row" style="float: right">
+                <div class="form-group row mr-3" style="float: right">
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </form>
