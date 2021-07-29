@@ -21,10 +21,10 @@
         {% if user %}
             {{ profile(payload, user, invitations, attempts) }}
         {% endif %}
-        {% if typeof add === 'string' %}
+        {% if add and add !== true %}
             {{ addtorrent.download(add) }}
         {% endif %}
-        {% if add === true %}
+        {% if add %}
             {{ addtorrent.form(add) }}
         {% endif %}
         {% if not user and not add %}
