@@ -117,7 +117,13 @@ async function addTorrent(req, res) {
         let torrent = parseTorrent(tFile.data)
 
         const torrentExists = await Torrent.exists({"infoHash": torrent.infoHash})
-        console.log(torrentExists)
+        if (torrentExists) {
+            return res.render('home', {
+                payload: req.payload,
+                add: torrent.infoHash,
+                alert: {type: 'info', msg: 'Torrent is already registered.'}
+            })
+        }
 
         torrent.private = true
         torrent.announce = []
@@ -141,7 +147,7 @@ async function addTorrent(req, res) {
 
         const collection = await instance.save()
 
-        return res.render('home', { payload: req.payload, add: collection._id, alert: { type: 'success', msg: 'Torrent registered successfully.'}})
+        return res.status(201).render('home', { payload: req.payload, add: collection._id, alert: { type: 'success', msg: 'Torrent registered successfully.'}})
 
     } catch (err) {
         console.error(err)
