@@ -1,5 +1,17 @@
 {% macro download(add) %}
-    <a href="/torrent/{{ add }}" class="btn btn-success mb-20" style="width: 700px"><i class="bi bi-download"></i>&nbsp;Download</a>
+<div class="card" style="width: 700px">
+    <div class="card-header">Register torrent</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-8">
+                <a href="/torrent/{{ add }}" class="btn btn-success"><i class="bi bi-download"></i>&nbsp;Download</a>
+            </div>
+            <div class="col-4">
+                <a href="/add" class="btn btn-secondary">Add another</a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endmacro %}
 {% macro form() %}
     <div class="card" style="width: 700px">

@@ -23,8 +23,7 @@
         {% endif %}
         {% if add and add !== true %}
             {{ addtorrent.download(add) }}
-        {% endif %}
-        {% if add %}
+        {% elseif add %}
             {{ addtorrent.form(add) }}
         {% endif %}
         {% if not user and not add %}
