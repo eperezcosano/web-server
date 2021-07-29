@@ -8,6 +8,7 @@ const Torrent = mongoose.model('Torrent')
 
 async function checkTorrent(infoHash, params, cb) {
 
+    console.log(params)
     const token = params.k
     if (!token) {
         return cb(new Error('Unauthorised (1)'))
