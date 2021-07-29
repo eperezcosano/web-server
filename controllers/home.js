@@ -116,6 +116,9 @@ async function addTorrent(req, res) {
 
         let torrent = parseTorrent(tFile.data)
 
+        const torrentExists = await Torrent.exists({"infoHash": torrent.infoHash})
+        console.log(torrentExists)
+
         torrent.private = true
         torrent.announce = []
         torrent.comment = 'Private torrent from Lufo.ml'
