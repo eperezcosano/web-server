@@ -115,10 +115,9 @@ async function addTorrent(req, res) {
         }
 
         let torrent = parseTorrent(tFile.data)
-        const token = jwt.sign({ id: req.payload.id, torrent: torrent.infoHash }, trackerSecret)
 
         torrent.private = true
-        torrent.announce = ['http://lufo.ml:8000/announce?k=' + token, 'ws://lufo.ml:8000']
+        torrent.announce = []
         torrent.comment = 'Private torrent from Lufo.ml'
         torrent.createdBy = req.payload.uname
         torrent.created = new Date()
@@ -138,9 +137,8 @@ async function addTorrent(req, res) {
         })
 
         const collection = await instance.save()
-        console.log(collection)
 
-        return res.render('home', { payload: req.payload, add: true, alert: { type: 'success', msg: 'Torrent registered successfully.'}})
+        return res.render('home', { payload: req.payload, add: collection._id, alert: { type: 'success', msg: 'Torrent registered successfully.'}})
 
     } catch (err) {
         console.error(err)
@@ -149,14 +147,26 @@ async function addTorrent(req, res) {
 }
 
 async function downloadTorrent(req, res) {
-    
-    const id = req.params.id
-    /*
-    res.setHeader('Content-disposition', 'attachment; filename=' + tFile.name)
-    res.setHeader('Content-type', 'application/x-bittorrent')
-    res.end(parseTorrent.toTorrentFile(torrent))
-    */
-    res.end('OK')
+    try {
+        const id = req.params.id
+        const doc = await Torrent.findOne({"_id": id})
+        if (!doc) {
+            return res.render('home', { payload: req.payload, alert: { type: 'error', msg: 'Torrent not found' }})
+        }
+
+        let torrent = parseTorrent(doc.file)
+        const token = jwt.sign({ id: req.payload.id, torrent: torrent.infoHash }, trackerSecret)
+        torrent.announce = ['http://lufo.ml:8000/announce?k=' + token, 'ws://lufo.ml:8000']
+        const buffer = parseTorrent.toTorrentFile(torrent)
+
+        res.setHeader('Content-disposition', 'attachment; filename=' + torrent.name)
+        res.setHeader('Content-type', 'application/x-bittorrent')
+        res.end(buffer)
+
+    } catch (err) {
+        console.error(err)
+        return res.status(500).render('home', { payload: req.payload, alert: { type: 'warning', msg: 'Internal error. Please try again later...'} })
+    }
 }
 
 module.exports = {

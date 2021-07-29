@@ -21,7 +21,11 @@
         {% if user %}
             {{ profile(payload, user, invitations, attempts) }}
         {% elseif add %}
-            {{ addtorrent.form(payload) }}
+            {% if add == true %}
+                {{ addtorrent.form(payload) }}
+            {% else %}
+                {{ add }}
+            {% endif %}
         {% else %}
         <h1>Home</h1>
         {% endif %}
