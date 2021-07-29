@@ -30,7 +30,7 @@ function register(req, res, next) {
     if (errors) {
         const alertErrors = getAlertErrors(errors)
         console.log(alertErrors)
-        return res.status(400).render('index', {register: {email: req.body.email}, errors})
+        return res.status(400).render('index', {register: {email: req.body.email}, alertErrors})
     } else {
         next()
     }
