@@ -17,7 +17,8 @@ async function checkTorrent(infoHash, params, cb) {
     console.log('peer_id', params.peer_id)
     console.log('type', params.type)
     console.log('------------------------------')
-    return cb(null)
+    cb(null)
+    /*
     const token = params.k
     if (!token) {
         return cb(new Error('Unauthorised (1)'))
@@ -45,7 +46,7 @@ async function checkTorrent(infoHash, params, cb) {
     } catch (err) {
         console.log(err)
         return cb(new Error('Unauthorised (3)'))
-    }
+    }*/
 }
 
 module.exports = {checkTorrent}
