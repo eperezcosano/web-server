@@ -20,9 +20,14 @@
         {{ forms.alert(alert) }}
         {% if user %}
             {{ profile(payload, user, invitations, attempts) }}
-        {% elseif add %}
+        {% endif %}
+        {% if typeof add === 'string' %}
+            {{ addtorrent.download(add) }}
+        {% endif %}
+        {% if add === true %}
             {{ addtorrent.form(add) }}
-        {% else %}
+        {% endif %}
+        {% if not user and not add %}
         <h1>Home</h1>
         {% endif %}
     </div>

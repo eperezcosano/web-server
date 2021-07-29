@@ -5,10 +5,7 @@
         </div>
     </div>
 {% endmacro %}
-{% macro form(add) %}
-    {% if typeof add === 'string' %}
-        {{ addtorrent.download(add) }}
-    {% endif %}
+{% macro form() %}
     <div class="card" style="width: 700px">
         <div class="card-header">Register torrent</div>
         <div class="card-body">
