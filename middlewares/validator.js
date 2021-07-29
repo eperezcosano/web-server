@@ -8,6 +8,14 @@ function getErrors(errors) {
     }
 }
 
+function getAlertErrors(errors) {
+    if (!errors.isEmpty()) {
+        return errors.map(item => item.msg).join('\n')
+    } else {
+        return null
+    }
+}
+
 function index(req, res, next) {
     const errors = getErrors(validationResult(req))
     if (errors) {
@@ -20,6 +28,8 @@ function index(req, res, next) {
 function register(req, res, next) {
     const errors = getErrors(validationResult(req))
     if (errors) {
+        const alertErrors = getAlertErrors(errors)
+        console.log(alertErrors)
         return res.status(400).render('index', {register: {email: req.body.email}, errors})
     } else {
         next()

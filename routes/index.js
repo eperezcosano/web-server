@@ -102,7 +102,7 @@ router.get('/user/:uname',
     limiter,
     auth.verifyToken,
     [
-        param('uname').isAlphanumeric()
+        param('uname').isAlphanumeric().withMessage('User not found.')
     ],
     validator.home,
     homeController.userProfile
@@ -120,7 +120,7 @@ router.get('/torrent/:id',
     limiter,
     auth.verifyToken,
     [
-        param('id').isLength({min: 24, max: 24}).isHexadecimal()
+        param('id').isLength({min: 24, max: 24}).isHexadecimal().withMessage('Torrent not found.')
     ],
     validator.home,
     homeController.downloadTorrent
