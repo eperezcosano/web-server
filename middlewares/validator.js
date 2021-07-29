@@ -28,9 +28,7 @@ function index(req, res, next) {
 function register(req, res, next) {
     const errors = getErrors(validationResult(req))
     if (errors) {
-        const alertErrors = getAlertErrors(errors)
-        console.log(alertErrors)
-        return res.status(400).render('index', {register: {email: req.body.email}, alertErrors})
+        return res.status(400).render('index', {register: {email: req.body.email}, errors})
     } else {
         next()
     }
@@ -39,8 +37,8 @@ function register(req, res, next) {
 function home(req, res, next) {
     const errors = getErrors(validationResult(req))
     if (errors) {
-        console.log(errors)
-        return res.render('home', { payload: req.payload, alert: { type: 'error', msg: errors }})
+        const alertErrors = getAlertErrors(errors)
+        return res.render('home', { payload: req.payload, alert: { type: 'error', msg: alertErrors }})
     } else {
         next()
     }
