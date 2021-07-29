@@ -13,8 +13,8 @@ async function checkTorrent(infoHash, params, cb) {
     console.log('uploaded', params.uploaded)
     console.log('downloaded', params.downloaded)
     console.log('left', params.left)
-    console.log('info_hash', params.info_hash.slice(params.info_hash - 5))
-    console.log('peer_id', params.peer_id.slice(params.peer_id - 5))
+    console.log('info_hash', params.info_hash)
+    console.log('peer_id', params.peer_id)
     console.log('type', params.type)
     console.log('------------------------------')
     const token = params.k
