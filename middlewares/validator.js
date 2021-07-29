@@ -8,14 +8,6 @@ function getErrors(errors) {
     }
 }
 
-function getAlertErrors(errors) {
-    if (!errors.isEmpty()) {
-        return Object.values(errors).join('\n')
-    } else {
-        return null
-    }
-}
-
 function index(req, res, next) {
     const errors = getErrors(validationResult(req))
     if (errors) {
@@ -37,8 +29,7 @@ function register(req, res, next) {
 function home(req, res, next) {
     const errors = getErrors(validationResult(req))
     if (errors) {
-        const alertErrors = getAlertErrors(errors)
-        return res.render('home', { payload: req.payload, alert: { type: 'error', msg: alertErrors }})
+        return res.render('home', { payload: req.payload, alert: { type: 'error', msg: Object.values(errors).join('\n') }})
     } else {
         next()
     }
