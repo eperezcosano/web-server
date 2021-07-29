@@ -137,16 +137,24 @@ async function addTorrent(req, res) {
             owner: req.payload.id
         })
 
-        await instance.save()
+        const collection = await instance.save()
+        console.log(collection)
 
-        res.setHeader('Content-disposition', 'attachment; filename=' + tFile.name)
-        res.setHeader('Content-type', 'application/x-bittorrent')
-        res.end(parseTorrent.toTorrentFile(torrent))
+        return res.render('home', { payload: req.payload, add: true, alert: { type: 'success', msg: 'Torrent registered successfully.'}})
 
     } catch (err) {
         console.error(err)
         return res.status(500).render('home', { payload: req.payload, add: true, alert: { type: 'warning', msg: 'Internal error. Please try again later...'} })
     }
+}
+
+async function downloadTorrent(req, res) {
+    /*
+    res.setHeader('Content-disposition', 'attachment; filename=' + tFile.name)
+    res.setHeader('Content-type', 'application/x-bittorrent')
+    res.end(parseTorrent.toTorrentFile(torrent))
+    */
+    res.end('OK')
 }
 
 module.exports = {
@@ -155,5 +163,6 @@ module.exports = {
     userProfile,
     invite,
     addTorrentPage,
-    addTorrent
+    addTorrent,
+    downloadTorrent
 }
