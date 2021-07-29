@@ -120,7 +120,11 @@ router.get('/torrent/:infoHash',
     limiter,
     auth.verifyToken,
     [
-        param('infoHash').isLength({min: 24, max: 24}).isHexadecimal().withMessage('Torrent not found.')
+        param('infoHash')
+            .isLength({min: 40, max: 40})
+            .withMessage('Invalid hash length.')
+            .isHexadecimal()
+            .withMessage('Invalid hash.')
     ],
     validator.home,
     homeController.downloadTorrent
