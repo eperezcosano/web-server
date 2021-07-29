@@ -1,4 +1,11 @@
-{% macro form(payload) %}
+{% macro download(add) %}
+    <div class="card text-white bg-success" style="width: 700px">
+        <div class="card-body">
+            <a href="/torrent/{{ add }}" class="btn btn-outline-success stretched-link">Download</a>
+        </div>
+    </div>
+{% endmacro %}
+{% macro form() %}
     <div class="card" style="width: 700px">
         <div class="card-header">Register torrent</div>
         <div class="card-body">
