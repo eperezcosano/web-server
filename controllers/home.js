@@ -157,8 +157,8 @@ async function addTorrent(req, res) {
 
 async function downloadTorrent(req, res) {
     try {
-        const id = req.params.id
-        const doc = await Torrent.findOne({"_id": id})
+        const infoHash = req.params.infoHash
+        const doc = await Torrent.findOne({"infoHash": infoHash})
         if (!doc) {
             return res.render('home', { payload: req.payload, alert: { type: 'error', msg: 'Torrent not found' }})
         }

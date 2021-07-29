@@ -116,11 +116,11 @@ router.get('/add', limiter, auth.verifyToken, homeController.addTorrentPage)
 router.post('/add', limiter, auth.verifyToken, fileHandler, homeController.addTorrent)
 
 // Download torrent
-router.get('/torrent/:id',
+router.get('/torrent/:infoHash',
     limiter,
     auth.verifyToken,
     [
-        param('id').isLength({min: 24, max: 24}).isHexadecimal().withMessage('Torrent not found.')
+        param('infoHash').isLength({min: 24, max: 24}).isHexadecimal().withMessage('Torrent not found.')
     ],
     validator.home,
     homeController.downloadTorrent
