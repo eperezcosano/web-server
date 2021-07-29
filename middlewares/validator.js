@@ -10,7 +10,7 @@ function getErrors(errors) {
 
 function getAlertErrors(errors) {
     if (!errors.isEmpty()) {
-        return errors.map(item => item.msg).join('\n')
+        return Object.values(errors).join('\n')
     } else {
         return null
     }
