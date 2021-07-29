@@ -21,10 +21,7 @@
         {% if user %}
             {{ profile(payload, user, invitations, attempts) }}
         {% elseif add %}
-            {% if typeof add === 'string' %}
-                {{ addtorrent.download(add) }}
-            {% endif %}
-            {{ addtorrent.form() }}
+            {{ addtorrent.form(add) }}
         {% else %}
         <h1>Home</h1>
         {% endif %}
