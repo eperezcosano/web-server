@@ -149,6 +149,8 @@ async function addTorrent(req, res) {
 }
 
 async function downloadTorrent(req, res) {
+    
+    const id = req.params.id
     /*
     res.setHeader('Content-disposition', 'attachment; filename=' + tFile.name)
     res.setHeader('Content-type', 'application/x-bittorrent')

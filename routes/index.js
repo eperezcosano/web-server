@@ -116,6 +116,14 @@ router.get('/add', limiter, auth.verifyToken, homeController.addTorrentPage)
 router.post('/add', limiter, auth.verifyToken, fileHandler, homeController.addTorrent)
 
 // Download torrent
-router.get('/torrent/:id', limiter, auth.verifyToken, homeController.downloadTorrent)
+router.get('/torrent/:id',
+    limiter,
+    auth.verifyToken,
+    [
+        param('id').isLength({min: 24, max: 24}).isHexadecimal()
+    ],
+    validator.home,
+    homeController.downloadTorrent
+)
 
 module.exports = router;
