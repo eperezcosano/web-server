@@ -2,6 +2,7 @@
 {% import 'forms.njk' as forms %}
 {% from 'profile.njk' import profile %}
 {% import 'addtorrent.njk' as addtorrent %}
+{% import 'panels.njk' as panels %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,14 +21,17 @@
         {{ forms.alert(alert) }}
         {% if user %}
             {{ profile(payload, user, invitations, attempts) }}
-        {% endif %}
-        {% if add and add !== true %}
+        {% elseif add and add !== true %}
             {{ addtorrent.download(add) }}
-        {% elseif add %}
+        {% elseif add and add === true %}
             {{ addtorrent.form(add) }}
-        {% endif %}
-        {% if not user and not add %}
-        <h1>Home</h1>
+        {% elseif %}
+            <div class="row">
+                <div class="col-4">
+                {{ panels.stats() }}
+                </div>
+                <div class="col-8"></div>
+            </div>
         {% endif %}
     </div>
 </div>
