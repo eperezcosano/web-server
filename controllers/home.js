@@ -164,7 +164,7 @@ async function addTorrent(req, res) {
 
         const collection = await instance.save()
 
-        return res.status(201).render('home', { payload: req.payload, add: collection._id, alert: { type: 'success', msg: 'Torrent registered successfully.'}})
+        return res.status(201).render('home', { payload: req.payload, add: collection.infoHash, alert: { type: 'success', msg: 'Torrent registered successfully.'}})
 
     } catch (err) {
         console.error(err)
