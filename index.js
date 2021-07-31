@@ -88,3 +88,4 @@ tracker.on('stop', addr => {
 tracker.listen(trackerPort, hostname, () => {
     console.log('Tracker online')
 })
+module.exports = {tracker}
