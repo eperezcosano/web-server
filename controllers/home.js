@@ -21,8 +21,11 @@ const transporter = nodemailer.createTransport({
 })
 
 
-function home(req, res) {
-    res.render('home', {payload: req.payload})
+async function home(req, res) {
+    const totalUsers = await User.countDocuments()
+    const totalTorrents = await Torrent.countDocuments()
+    const stats = {totalUsers, totalTorrents}
+    res.render('home', {payload: req.payload, stats})
 }
 
 function logout(req, res) {

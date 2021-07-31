@@ -61,7 +61,7 @@ server.listen(port, 'localhost',() => {
 const tracker = new trackerServer({
     http: true,
     interval: 60000,
-    stats: false,
+    stats: true,
     trustProxy: false,
     udp: false,
     ws: true,
@@ -87,4 +87,5 @@ tracker.on('stop', addr => {
 })
 tracker.listen(trackerPort, hostname, () => {
     console.log('Tracker online')
+    console.log(Object.keys(server.torrents))
 })
