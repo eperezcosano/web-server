@@ -33,13 +33,24 @@ function logout(req, res) {
     return res.clearCookie('token').render('index')
 }
 
+function prettyBytes(num) {
+    let exponent, unit, neg = num < 0, units = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+    if (neg) num = -num
+    if (num < 1) return (neg ? '-' : '') + num + ' B'
+    exponent = Math.min(Math.floor(Math.log(num) / Math.log(1000)), units.length - 1)
+    num = Number((num / Math.pow(1000, exponent)).toFixed(2))
+    unit = units[exponent]
+    return (neg ? '-' : '') + num + ' ' + unit
+}
+
 async function userProfile(req, res) {
     try {
         const user = await User.findOne({"uname": req.params.uname})
         if (user) {
             const invitations = await Invitation.find({"referral": user._id })
             const attempts = await LoginAttempt.find({"user_id": user._id}).sort({createdAt: -1})
-            return res.render('home', { payload: req.payload, user, invitations, attempts })
+            const ratio = user.downloaded === 0 ? 0 : Math.round(((user.uploaded / user.downloaded) + Number.EPSILON) * 1000) / 1000
+            return res.render('home', { payload: req.payload, user, up: prettyBytes(user.uploaded), down: prettyBytes(user.downloaded), ratio, invitations, attempts })
         } else {
             return res.render('home', { payload: req.payload, alert: { type: 'error', msg: 'User not found' }})
         }

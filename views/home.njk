@@ -20,7 +20,7 @@
     <div class="container">
         {{ forms.alert(alert) }}
         {% if user %}
-            {{ profile(payload, user, invitations, attempts) }}
+            {{ profile(payload, user, up, down, ratio, invitations, attempts) }}
         {% elseif add and add !== true %}
             {{ addtorrent.download(add) }}
         {% elseif add and add === true %}
