@@ -17,8 +17,7 @@ async function checkTorrent(infoHash, params, cb) {
     console.log('peer_id', params.peer_id)
     console.log('type', params.type)
     console.log('------------------------------')
-    cb(null)
-    /*
+
     const token = params.k
     if (!token) {
         return cb(new Error('Unauthorised (1)'))
@@ -27,12 +26,12 @@ async function checkTorrent(infoHash, params, cb) {
         const payload = jwt.verify(token, trackerSecret)
 
         if (payload.torrent !== infoHash) {
-            return cb(new Error('Torrent not registered.'))
+            return cb(new Error('Torrent not registered (1)'))
         }
 
         const torrent = await Torrent.findOne({"infoHash": infoHash})
         if (!torrent) {
-            return cb(new Error('Torrent not registered.'))
+            return cb(new Error('Torrent not registered (2)'))
         }
         //TODO: update torrent stats and user
 
@@ -46,7 +45,7 @@ async function checkTorrent(infoHash, params, cb) {
     } catch (err) {
         console.log(err)
         return cb(new Error('Unauthorised (3)'))
-    }*/
+    }
 }
 
 module.exports = {checkTorrent}
