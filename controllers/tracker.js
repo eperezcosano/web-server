@@ -31,9 +31,9 @@ async function checkTorrent(infoHash, params, cb) {
 
         const updateTorrent = await Torrent.updateOne(
             {"infoHash": infoHash},
-            {$inc: {uploaded: params.uploaded, downloaded: params.downloaded}
-            }
-        )
+            {
+                $inc: {uploaded: params.uploaded, downloaded: params.downloaded}
+            })
         if (updateTorrent.ok !== 1) {
             return cb(new Error('Torrent not registered (2)'))
         }
