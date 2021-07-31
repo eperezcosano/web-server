@@ -22,6 +22,14 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: false
     },
+    uploaded: {
+        type: Number,
+        default: 0
+    },
+    downloaded: {
+        type: Number,
+        default: 0
+    },
     activation: {
         type: Boolean,
         default: false

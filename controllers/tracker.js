@@ -29,14 +29,20 @@ async function checkTorrent(infoHash, params, cb) {
             return cb(new Error('Torrent not registered (1)'))
         }
 
-        const torrent = await Torrent.findOne({"infoHash": infoHash})
-        if (!torrent) {
+        const updateTorrent = await Torrent.updateOne(
+            {"infoHash": infoHash},
+            {$inc: {uploaded: params.uploaded, downloaded: params.downloaded}
+            }
+        )
+        if (updateTorrent.ok !== 1) {
             return cb(new Error('Torrent not registered (2)'))
         }
-        //TODO: update torrent stats and user
 
-        const query = await User.updateOne({"_id": payload.id}, {"clientIP": params.ip})
-        if (query.ok !== 1) {
+        const updateUser = await User.updateOne(
+            {"_id": payload.id},
+            {"clientIP": params.ip, $inc: {uploaded: params.uploaded, downloaded: params.downloaded}
+            })
+        if (updateUser.ok !== 1) {
             return cb(new Error('Unauthorised (2)'))
         }
 

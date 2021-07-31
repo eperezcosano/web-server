@@ -26,6 +26,14 @@ const torrentSchema = new mongoose.Schema({
             type: Number,
             required: true
         },
+        uploaded: {
+            type: Number,
+            default: 0
+        },
+        downloaded: {
+            type: Number,
+            default: 0
+        },
         owner: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
