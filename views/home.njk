@@ -28,9 +28,11 @@
         {% else %}
             <div class="row">
                 <div class="col-4">
-                {{ panels.stats(stats) }}
+                    {{ panels.stats(stats) }}
                 </div>
-                <div class="col-8"></div>
+                <div class="col-8">
+                    {{ panels.torrents(torrent) }}
+                </div>
             </div>
         {% endif %}
     </div>
