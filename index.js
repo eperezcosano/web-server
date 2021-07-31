@@ -87,5 +87,4 @@ tracker.on('stop', addr => {
 })
 tracker.listen(trackerPort, hostname, () => {
     console.log('Tracker online')
-    console.log(Object.keys(server.torrents))
 })
