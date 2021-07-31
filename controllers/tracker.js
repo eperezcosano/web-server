@@ -40,7 +40,9 @@ async function checkTorrent(infoHash, params, cb) {
 
         const updateUser = await User.updateOne(
             {"_id": payload.id},
-            {"clientIP": params.ip, $inc: {uploaded: params.uploaded, downloaded: params.downloaded}
+            {
+                $set: {"clientIP": params.ip},
+                $inc: {uploaded: params.uploaded, downloaded: params.downloaded}
             })
         if (updateUser.ok !== 1) {
             return cb(new Error('Unauthorised (2)'))
