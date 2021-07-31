@@ -59,8 +59,9 @@
             {% for torrent in torrents %}
             <tr>
                 <th scope='row'>{{ loop.index }}</th>
-                <td>{{ torrent.name }}</td>
+                <td><a href="/torrent/{{ torrent.infoHash }}" >{{ torrent.name }}</a></td>
                 <td>{{ torrent.length }}</td>
+                <td>{{ torrent.createdAt.toLocaleString() }}</td>
                 <td>-1</td>
                 <td>-1</td>
                 <td>-1</td>
