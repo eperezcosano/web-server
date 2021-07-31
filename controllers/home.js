@@ -49,7 +49,7 @@ async function userProfile(req, res) {
         if (user) {
             const invitations = await Invitation.find({"referral": user._id })
             const attempts = await LoginAttempt.find({"user_id": user._id}).sort({createdAt: -1})
-            const ratio = user.downloaded === 0 ? 0 : Math.round(((user.uploaded / user.downloaded) + Number.EPSILON) * 1000) / 1000
+            const ratio = (user.uploaded === 0 && user.downloaded === 0) ? 0 : Math.round(((user.uploaded / user.downloaded) + Number.EPSILON) * 1000) / 1000
             return res.render('home', { payload: req.payload, user, up: prettyBytes(user.uploaded), down: prettyBytes(user.downloaded), ratio, invitations, attempts })
         } else {
             return res.render('home', { payload: req.payload, alert: { type: 'error', msg: 'User not found' }})
