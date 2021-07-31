@@ -25,7 +25,7 @@ const transporter = nodemailer.createTransport({
 async function home(req, res) {
     const totalUsers = await User.countDocuments()
     const totalTorrents = await Torrent.countDocuments()
-    const torrents= await Torrent.find()
+    const torrents = await Torrent.find()
     const stats = {totalUsers, totalTorrents}
     console.log('tracker', server.tracker)
     res.render('home', {payload: req.payload, stats, torrents})
