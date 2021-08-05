@@ -58,7 +58,7 @@
         {% set page = page | int %}
         {% for torrent in torrents %}
         <tr>
-            <th scope='row'>{{ loop.index + page }}</th>
+            <th scope='row'>{{ loop.index + page * 2 }}</th>
             <td><a href="/torrent/{{ torrent.infoHash }}" >{{ torrent.name }}</a></td>
             <td>{{ torrent.date }}</td>
             <td>{{ torrent.length }}</td>
@@ -80,7 +80,7 @@
                 <li class="page-item"><a class="page-link" href="/{{ page - 1 }}">Previous</a></li>
                 {% endif %}
                 {% for i in [-2,-1,0,1,2] %}
-                    {% if page + i > 0 and page + i <= total * 1 %}
+                    {% if page + i > 0 and page + i <= total / 2 %}
                     <li class="page-item {{ 'active' if i === 0 }}">
                         <a class="page-link" href="/{{ page + i }}">
                             {{ page + i }}
