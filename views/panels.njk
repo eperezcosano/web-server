@@ -58,7 +58,7 @@
         {% set page = page | int %}
         {% for torrent in torrents %}
         <tr>
-            <th scope='row'>{{ loop.index + page * 2 }}</th>
+            <th scope='row'>{{ loop.index0 + (page * 2) }}</th>
             <td><a href="/torrent/{{ torrent.infoHash }}" >{{ torrent.name }}</a></td>
             <td>{{ torrent.date }}</td>
             <td>{{ torrent.length }}</td>
