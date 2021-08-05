@@ -100,7 +100,7 @@ async function home(req, res) {
     const totalUsers = await User.countDocuments()
     const totalTorrents = await Torrent.countDocuments()
     const torrents = await Torrent.find()
-    const traffic = await User.aggregate([{
+    const traffic = await User.aggregate({
         $group: {
             _id: '',
             uploaded: {$sum: '$uploaded'},
@@ -112,7 +112,7 @@ async function home(req, res) {
             traffic: { $add: ['$uploaded', '$downloaded']}
             }
         }
-    ])
+    )
     console.log('traffic', traffic)
     const stats = {...{totalUsers, totalTorrents}, ...getStats()}
     console.log(stats)
