@@ -59,7 +59,7 @@
         {% set limit = (total / 4) | round(0, "ceil") %}
         {% for torrent in torrents %}
         <tr>
-            <th scope='row'>{{ loop.index + ((page - 1) * limit) }}</th>
+            <th scope='row'>{{ loop.index + ((page - 1) * 4) }}</th>
             <td><a href="/torrent/{{ torrent.infoHash }}" >{{ torrent.name }}</a></td>
             <td>{{ torrent.date }}</td>
             <td>{{ torrent.length }}</td>
