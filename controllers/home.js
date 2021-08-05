@@ -98,7 +98,7 @@ function getStats(server) {
 async function home(req, res) {
     const totalUsers = await User.countDocuments()
     const totalTorrents = await Torrent.countDocuments()
-    const torrents = await Torrent.find().sort({createdAt: -1}).limit(4)
+    const torrents = await Torrent.find().sort({createdAt: -1}).limit(4).populate('owner')
     const traffic = await User.aggregate([{
         $group: {
             _id: '',
@@ -114,13 +114,17 @@ async function home(req, res) {
     ])
     const server = new Tracker().getInstance().serverTracker
     const stats = {...{totalUsers, totalTorrents, traffic: prettyBytes(traffic[0].traffic)}, ...getStats(server)}
-    torrents.forEach(torrent => {
-        torrent.downloads = Math.round(torrent.downloaded / torrent.length)
-        torrent.length = prettyBytes(torrent.length)
-        torrent.seeders = server.torrents[torrent.infoHash] ? server.torrents[torrent.infoHash].complete : 0
-        torrent.leechers = server.torrents[torrent.infoHash] ? server.torrents[torrent.infoHash].incomplete : 0
+    const torrentTable = torrents.map(torrent => {
+        let res = {}
+        res.name = torrent.title ? torrent.title : torrent.name
+        res.files = torrent.files
+        res.downloads = Math.round(torrent.downloaded / torrent.length)
+        res.length = prettyBytes(torrent.length)
+        res.seeders = server.torrents[torrent.infoHash] ? server.torrents[torrent.infoHash].complete : 0
+        res.leechers = server.torrents[torrent.infoHash] ? server.torrents[torrent.infoHash].incomplete : 0
+        res.owner = torrent.owner
     })
-    console.log(torrents)
+    console.log(torrentTable)
     res.render('home', {payload: req.payload, stats, torrents})
 }
 
