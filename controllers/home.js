@@ -81,11 +81,16 @@ function getStats() {
     const isIPv4 = peer => peer.ipv4
     const isIPv6 = peer => peer.ipv6
 
+    const peersSeeders = countPeers(isSeeder, allPeers)
+    const peersLeechers = countPeers(isLeecher, allPeers)
+    const ratio = (peersSeeders === 0 && peersLeechers) ? 0 : Math.round(((peersSeeders / peersLeechers) + Number.EPSILON) * 1000) / 1000
+
     return {
         activeTorrents,
         peersAll: Object.keys(allPeers).length,
-        peersSeeders: countPeers(isSeeder, allPeers),
-        peersLeechers: countPeers(isLeecher, allPeers),
+        peersSeeders,
+        peersLeechers,
+        ratio,
         peersIPv4: countPeers(isIPv4, allPeers),
         peersIPv6: countPeers(isIPv6, allPeers),
     }
