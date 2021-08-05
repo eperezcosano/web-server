@@ -115,7 +115,6 @@ async function home(req, res) {
     ])
 
     const stats = {...{totalUsers, totalTorrents, traffic: prettyBytes(traffic[0].traffic)}, ...getStats()}
-    console.log(stats)
     res.render('home', {payload: req.payload, stats, torrents})
 }
 

@@ -20,7 +20,7 @@ class PrivateTracker {
         this.tracker = new trackerServer({
             http: true,
             interval: 60000,
-            stats: true,
+            stats: false,
             trustProxy: false,
             udp: false,
             ws: true,
