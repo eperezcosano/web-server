@@ -76,24 +76,20 @@ function getStats() {
         })
     })
 
-    const isSeederOnly = peer => peer.seeder && peer.leecher === false
-    const isLeecherOnly = peer => peer.leecher && peer.seeder === false
-    const isSeederAndLeecher = peer => peer.seeder && peer.leecher
+    const isSeeder = peer => peer.seeder === true
+    const isLeecher = peer => peer.leecher === true
     const isIPv4 = peer => peer.ipv4
     const isIPv6 = peer => peer.ipv6
 
-    const stats = {
+    return {
         torrents: infoHashes.length,
         activeTorrents,
         peersAll: Object.keys(allPeers).length,
-        peersSeederOnly: countPeers(isSeederOnly, allPeers),
-        peersLeecherOnly: countPeers(isLeecherOnly, allPeers),
-        peersSeederAndLeecher: countPeers(isSeederAndLeecher, allPeers),
+        peersSeeders: countPeers(isSeeder, allPeers),
+        peersLeechers: countPeers(isLeecher, allPeers),
         peersIPv4: countPeers(isIPv4, allPeers),
         peersIPv6: countPeers(isIPv6, allPeers),
     }
-
-    return stats
 }
 
 async function home(req, res) {
