@@ -31,7 +31,7 @@
                     {{ panels.stats(stats) }}
                 </div>
                 <div class="col-9">
-                    {{ panels.torrents(stats.totalTorrents, torrents, page) }}
+                    {{ panels.torrents(torrents, page, stats.totalTorrents) }}
                 </div>
             </div>
         {% endif %}
