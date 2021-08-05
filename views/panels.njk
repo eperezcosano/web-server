@@ -84,10 +84,10 @@
                     <li class="page-item {{ 'active' if i === 0 }}">
                         <a class="page-link" href="/{{ page + i }}">
                             {{ page + i }}
+                            {% if i === 0 %}
+                                <span class="sr-only">(current)</span>
+                            {% endif %}
                         </a>
-                        {% if i === 0 %}
-                            <span class="sr-only">(current)</span>
-                        {% endif %}
                     </li>
                     {% endif %}
                 {% endfor %}
