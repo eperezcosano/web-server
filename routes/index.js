@@ -24,7 +24,7 @@ const resendLimiter = rateLimit({
 
 // Index page
 router.get('/', limiter, auth.verifyToken, homeController.home)
-router.get('/:page', limiter,
+router.get('/page/:page', limiter,
     auth.verifyToken,
     [
         param('page').isInt({min: 1}).withMessage('Invalid parameter.')
