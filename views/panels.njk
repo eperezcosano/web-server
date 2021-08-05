@@ -85,7 +85,9 @@
                         <a class="page-link" href="/{{ page + i }}">
                             {{ page + i }}
                         </a>
-                        {{ '<span class="sr-only">(current)</span>' if i === 0 }}
+                        {% if i === 0 %}
+                            <span class="sr-only">(current)</span>
+                        {% endif %}
                     </li>
                     {% endif %}
                 {% endfor %}
