@@ -97,7 +97,7 @@ function getStats(server) {
 
 async function home(req, res) {
     const page = req.params.page ? req.params.page : 1
-    const itemsPerPage = 2
+    const itemsPerPage = 4
     const totalUsers = await User.countDocuments()
     const totalTorrents = await Torrent.countDocuments()
     const torrents = await Torrent.find().sort({createdAt: -1}).skip((page - 1) * itemsPerPage).limit(itemsPerPage).populate('owner')
