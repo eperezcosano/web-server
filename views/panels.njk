@@ -65,7 +65,7 @@
             <td>{{ torrent.downloads }}</td>
             <td>{{ torrent.seeders }}</td>
             <td>{{ torrent.leechers }}</td>
-            <td>{{ torrent.owner }}</td>
+            <td><a href="/user/{{ torrent.owner }}">{{ torrent.owner }}</a></td>
         </tr>
         {% endfor %}
         </tbody>
