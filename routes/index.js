@@ -7,7 +7,6 @@ const hcaptcha = require('../middlewares/hcaptcha')
 const { body, param } = require('express-validator')
 const rateLimit = require('express-rate-limit')
 const fileUpload = require("express-fileupload")
-const path = require("path")
 
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
@@ -16,12 +15,6 @@ const limiter = rateLimit({
 const fileHandler = fileUpload({
     limits: { fileSize: 102400 },
     abortOnLimit: true
-    /*
-    safeFileNames: true,
-    useTempFiles: false,
-    tempFileDir: path.join(__dirname, '../tmp'),
-    debug: false
-    */
 })
 const resendLimiter = rateLimit({
     windowMs: 30 * 60 * 1000,
@@ -31,6 +24,14 @@ const resendLimiter = rateLimit({
 
 // Index page
 router.get('/', limiter, auth.verifyToken, homeController.home)
+router.get('/:page', limiter,
+    auth.verifyToken,
+    [
+        param('page').isNumeric().withMessage('Invalid parameter.')
+    ],
+    validator.home,
+    homeController.home
+)
 router.post('/',
     limiter,
     [

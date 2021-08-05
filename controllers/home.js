@@ -96,9 +96,10 @@ function getStats(server) {
 }
 
 async function home(req, res) {
+    const page = req.params.page ? req.params.page : 0
     const totalUsers = await User.countDocuments()
     const totalTorrents = await Torrent.countDocuments()
-    const torrents = await Torrent.find().sort({createdAt: -1}).limit(4).populate('owner')
+    const torrents = await Torrent.find().sort({createdAt: -1}).skip(page * 4).limit(4).populate('owner')
     const traffic = await User.aggregate([{
         $group: {
             _id: '',
