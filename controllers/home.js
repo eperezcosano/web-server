@@ -123,6 +123,13 @@ async function home(req, res) {
         res.seeders = server.torrents[torrent.infoHash] ? server.torrents[torrent.infoHash].complete : 0
         res.leechers = server.torrents[torrent.infoHash] ? server.torrents[torrent.infoHash].incomplete : 0
         res.owner = torrent.owner.uname
+        res.date = torrent.createdAt.toLocaleString("en-GB", {
+            year: "numeric",
+            month: "short",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit"
+        })
         return res
     })
     console.log(torrentTable)
