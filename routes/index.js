@@ -27,7 +27,7 @@ router.get('/', limiter, auth.verifyToken, homeController.home)
 router.get('/:page', limiter,
     auth.verifyToken,
     [
-        param('page').isNumeric().withMessage('Invalid parameter.')
+        param('page').isInt({min: 1}).withMessage('Invalid parameter.')
     ],
     validator.home,
     homeController.home
