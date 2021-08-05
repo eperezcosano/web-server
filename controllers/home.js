@@ -99,7 +99,7 @@ function getStats() {
 async function home(req, res) {
     const totalUsers = await User.countDocuments()
     const totalTorrents = await Torrent.countDocuments()
-    const torrents = await Torrent.find()
+    const torrents = await Torrent.find().sort({createdAt: -1}).limit(4)
     const traffic = await User.aggregate([{
         $group: {
             _id: '',
