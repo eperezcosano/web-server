@@ -117,8 +117,8 @@ async function home(req, res) {
     const torrentTable = torrents.map(torrent => {
         torrent.downloads = Math.round(torrent.downloaded / torrent.length)
         torrent.length = prettyBytes(torrent.length)
-        torrent.seeders = server.torrents[torrent.infoHash].complete
-        torrent.leechers = server.torrents[torrent.infoHash].incomplete
+        torrent.seeders = server.torrents[torrent.infoHash] ? server.torrents[torrent.infoHash].complete : 0
+        torrent.leechers = server.torrents[torrent.infoHash] ? server.torrents[torrent.infoHash].incomplete : 0
     })
     console.log(torrentTable)
     res.render('home', {payload: req.payload, stats, torrents})
