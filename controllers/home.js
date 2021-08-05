@@ -118,6 +118,7 @@ async function home(req, res) {
     const stats = {...{totalUsers, totalTorrents, traffic: prettyBytes(traffic[0].traffic)}, ...getStats(server)}
     const torrentTable = torrents.map(torrent => {
         let res = {}
+        res.infoHash = torrent.infoHash
         res.name = torrent.title ? torrent.title : torrent.name
         res.files = torrent.files
         res.downloads = Math.round(torrent.downloaded / torrent.length)
