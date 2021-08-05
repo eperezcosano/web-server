@@ -21,14 +21,87 @@ const transporter = nodemailer.createTransport({
     }
 })
 
+function countPeers (filterFunction, allPeers) {
+    const hasOwnProperty = Object.prototype.hasOwnProperty
+    let count = 0
+    let key
+
+    for (key in allPeers) {
+        if (hasOwnProperty.call(allPeers, key) && filterFunction(allPeers[key])) {
+            count++
+        }
+    }
+
+    return count
+}
+
+function getStats() {
+    const server = new Tracker().getInstance().serverTracker
+    const infoHashes = Object.keys(server.torrents)
+    const hasOwnProperty = Object.prototype.hasOwnProperty
+    let activeTorrents = 0
+    const allPeers = {}
+    infoHashes.forEach(infoHash => {
+        const peers = server.torrents[infoHash].peers
+        const keys = peers.keys
+        if (keys.length > 0) activeTorrents++
+
+        keys.forEach(peerId => {
+            // Don't mark the peer as most recently used for stats
+            const peer = peers.peek(peerId)
+            if (peer == null) return // peers.peek() can evict the peer
+
+            if (!hasOwnProperty.call(allPeers, peerId)) {
+                allPeers[peerId] = {
+                    ipv4: false,
+                    ipv6: false,
+                    seeder: false,
+                    leecher: false
+                }
+            }
+
+            if (peer.ip.includes(':')) {
+                allPeers[peerId].ipv6 = true
+            } else {
+                allPeers[peerId].ipv4 = true
+            }
+
+            if (peer.complete) {
+                allPeers[peerId].seeder = true
+            } else {
+                allPeers[peerId].leecher = true
+            }
+
+            allPeers[peerId].peerId = peer.peerId
+        })
+    })
+
+    const isSeederOnly = peer => peer.seeder && peer.leecher === false
+    const isLeecherOnly = peer => peer.leecher && peer.seeder === false
+    const isSeederAndLeecher = peer => peer.seeder && peer.leecher
+    const isIPv4 = peer => peer.ipv4
+    const isIPv6 = peer => peer.ipv6
+
+    const stats = {
+        torrents: infoHashes.length,
+        activeTorrents,
+        peersAll: Object.keys(allPeers).length,
+        peersSeederOnly: countPeers(isSeederOnly, allPeers),
+        peersLeecherOnly: countPeers(isLeecherOnly, allPeers),
+        peersSeederAndLeecher: countPeers(isSeederAndLeecher, allPeers),
+        peersIPv4: countPeers(isIPv4, allPeers),
+        peersIPv6: countPeers(isIPv6, allPeers),
+    }
+
+    return stats
+}
 
 async function home(req, res) {
     const totalUsers = await User.countDocuments()
     const totalTorrents = await Torrent.countDocuments()
     const torrents = await Torrent.find()
+    console.log(getStats())
     const stats = {totalUsers, totalTorrents}
-    const tracker = new Tracker().getInstance().serverTracker
-    console.log(Object.keys(tracker.torrents))
     res.render('home', {payload: req.payload, stats, torrents})
 }
 
