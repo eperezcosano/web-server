@@ -100,7 +100,7 @@ async function home(req, res) {
     const itemsPerPage = 1
     const totalUsers = await User.countDocuments()
     const totalTorrents = await Torrent.countDocuments()
-    const torrents = await Torrent.find().sort({createdAt: -1}).skip(page * itemsPerPage).limit(itemsPerPage).populate('owner')
+    const torrents = await Torrent.find().sort({createdAt: -1}).skip(page * 1).limit(1).populate('owner')
     const traffic = await User.aggregate([{
         $group: {
             _id: '',
