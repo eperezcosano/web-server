@@ -80,7 +80,7 @@
                 {% endif %}
                 {% for i in [-2,-1,0,1,2] %}
                     {% if page + i >= 0 and page + 1 <= total * 1 %}
-                        {{ i }}
+                    <li class="page-item"><a class="page-link" href="/{{ i }}">{{ i }}</a></li>
                     {# <li class="page-item"><a class="page-link" href="/{{ page + i }}">{{ page | int + i}}</a></li> #}
                     {% endif %}
                 {% endfor %}
