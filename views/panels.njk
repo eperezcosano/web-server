@@ -1,74 +1,70 @@
 {% macro stats(stats) %}
-    <div class="card">
+    <div class="card" style="border: 3px solid #3498db;">
         <div class="card-header">Tracker stats</div>
-        <div class="card-body">
-            <ul class="list-group">
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Users
-                    <span class="badge bg-secondary">{{ stats.totalUsers }}</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Torrents
-                    <span class="badge bg-secondary">{{ stats.totalTorrents }}</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Torrents Active
-                    <span class="badge bg-secondary">{{ stats.activeTorrents }}</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Peers
-                    <span class="badge bg-secondary">{{ stats.peersAll }}</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Seeding
-                    <span class="badge bg-secondary">{{ stats.peersSeeders }}</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Leeching
-                    <span class="badge bg-secondary">{{ stats.peersLeechers }}</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Ratio
-                    <span class="badge bg-secondary">{{ stats.ratio }}</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Traffic
-                    <span class="badge bg-secondary">{{ stats.traffic }}</span>
-                </li>
-            </ul>
-        </div>
+        <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Users
+                <span class="badge bg-secondary">{{ stats.totalUsers }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Torrents
+                <span class="badge bg-secondary">{{ stats.totalTorrents }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Torrents Active
+                <span class="badge bg-secondary">{{ stats.activeTorrents }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Peers
+                <span class="badge bg-secondary">{{ stats.peersAll }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Seeding
+                <span class="badge bg-secondary">{{ stats.peersSeeders }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Leeching
+                <span class="badge bg-secondary">{{ stats.peersLeechers }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Ratio
+                <span class="badge bg-secondary">{{ stats.ratio }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Traffic
+                <span class="badge bg-secondary">{{ stats.traffic }}</span>
+            </li>
+        </ul>
     </div>
 {% endmacro %}
 {% macro torrents(torrents) %}
-<div class="card">
+<div class="card" style="border: 3px solid #2ecc71;">
     <div class="card-header">Torrents</div>
-    <div class="card-body">
-        <table class="table table-striped table-bordered table-hover">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Date</th>
-                <th>Size</th>
-                <th>Downloads</th>
-                <th>Seeding</th>
-                <th>Leeching</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for torrent in torrents %}
-            <tr>
-                <th scope='row'>{{ loop.index }}</th>
-                <td><a href="/torrent/{{ torrent.infoHash }}" >{{ torrent.name }}</a></td>
-                <td>{{ torrent.length }}</td>
-                <td>{{ torrent.createdAt.toLocaleString() }}</td>
-                <td>-1</td>
-                <td>-1</td>
-                <td>-1</td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Size</th>
+            <th>Downloads</th>
+            <th>Seeding</th>
+            <th>Leeching</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for torrent in torrents %}
+        <tr>
+            <th scope='row'>{{ loop.index }}</th>
+            <td><a href="/torrent/{{ torrent.infoHash }}" >{{ torrent.name }}</a></td>
+            <td>{{ torrent.length }}</td>
+            <td>{{ torrent.createdAt.toLocaleString() }}</td>
+            <td>-1</td>
+            <td>-1</td>
+            <td>-1</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 </div>
 {% endmacro %}
