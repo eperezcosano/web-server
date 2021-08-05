@@ -11,7 +11,7 @@ const nodemailer = require('nodemailer')
 const {gmailUser, gmailPass, trackerSecret} = require("../config")
 const parseTorrent = require('parse-torrent')
 const jwt = require("jsonwebtoken")
-const server = require('../index')
+const Tracker = require('./tracker')
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -27,7 +27,8 @@ async function home(req, res) {
     const totalTorrents = await Torrent.countDocuments()
     const torrents = await Torrent.find()
     const stats = {totalUsers, totalTorrents}
-    console.log('tracker', server.tracker)
+    const tracker = new Tracker().getInstance().serverTracker
+    console.log(Object.keys(tracker.torrents))
     res.render('home', {payload: req.payload, stats, torrents})
 }
 

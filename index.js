@@ -3,16 +3,9 @@ const http = require('http')
 const nunjucks = require('nunjucks')
 const mongoose = require('mongoose')
 const cookieParser = require('cookie-parser')
-const trackerServer = require('bittorrent-tracker').Server
-const trackerController = require('./controllers/tracker')
+const Tracker = require('./controllers/tracker')
 const MONGO_URI = 'mongodb://localhost/web-server'
 const port = 3000
-const trackerPort = 8000
-const hostname = {
-    http: '::',
-    udp4: '0.0.0.0',
-    udp6: '::'
-}
 
 const app = express()
 const server = http.createServer(app)
@@ -45,6 +38,8 @@ server.listen(port, 'localhost',() => {
     console.log('Listening on http://localhost:' + port)
 })
 
+new Tracker()
+
 // TODO: stats
 // get info hashes for all torrents in the tracker server
 //Object.keys(server.torrents)
@@ -58,33 +53,3 @@ server.listen(port, 'localhost',() => {
 // get the peers who are in a particular torrent swarm
 //server.torrents[infoHash].peers
 
-const tracker = new trackerServer({
-    http: true,
-    interval: 60000,
-    stats: true,
-    trustProxy: false,
-    udp: false,
-    ws: true,
-    filter: trackerController.checkTorrent
-})
-tracker.on('error', err => {
-    console.error(`ERROR: ${err.message}`)
-})
-tracker.on('warning', err => {
-    console.log(`WARNING: ${err.message}`)
-})
-tracker.on('update', addr => {
-    console.log(`update: ${addr}`)
-})
-tracker.on('complete', addr => {
-    console.log(`complete: ${addr}`)
-})
-tracker.on('start', addr => {
-    console.log(`start: ${addr}`)
-})
-tracker.on('stop', addr => {
-    console.log(`stop: ${addr}`)
-})
-tracker.listen(trackerPort, hostname, () => {
-    console.log('Tracker online')
-})
