@@ -40,16 +40,3 @@ server.listen(port, 'localhost',() => {
 
 new Tracker()
 
-// TODO: stats
-// get info hashes for all torrents in the tracker server
-//Object.keys(server.torrents)
-
-// get the number of seeders for a particular torrent
-//server.torrents[infoHash].complete
-
-// get the number of leechers for a particular torrent
-//server.torrents[infoHash].incomplete
-
-// get the peers who are in a particular torrent swarm
-//server.torrents[infoHash].peers
-

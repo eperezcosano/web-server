@@ -20,7 +20,7 @@ const torrentSchema = new mongoose.Schema({
         },
         files: {
             type: Number,
-            default: 0
+            default: 1
         },
         file: {
             type: Buffer,

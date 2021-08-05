@@ -47,6 +47,7 @@
             <th>Name</th>
             <th>Date</th>
             <th>Size</th>
+            <th><i class="bi bi-files"></i></th>
             <th><i class="bi bi-file-earmark-arrow-down-fill"></i></th>
             <th><i class="bi bi-arrow-up"></i></th>
             <th><i class="bi bi-arrow-down"></i></th>
@@ -60,6 +61,7 @@
             <td><a href="/torrent/{{ torrent.infoHash }}" >{{ torrent.name }}</a></td>
             <td>{{ torrent.date }}</td>
             <td>{{ torrent.length }}</td>
+            <td>{{ torrent.files }}</td>
             <td>{{ torrent.downloads }}</td>
             <td>{{ torrent.seeders }}</td>
             <td>{{ torrent.leechers }}</td>
