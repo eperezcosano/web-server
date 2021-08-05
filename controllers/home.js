@@ -126,7 +126,7 @@ async function home(req, res) {
         return res
     })
     console.log(torrentTable)
-    res.render('home', {payload: req.payload, stats, torrents})
+    res.render('home', {payload: req.payload, stats, torrentTable})
 }
 
 function logout(req, res) {

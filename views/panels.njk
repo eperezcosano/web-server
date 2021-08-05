@@ -47,9 +47,9 @@
             <th>Name</th>
             <th>Date</th>
             <th>Size</th>
-            <th>Downloads</th>
-            <th>Seeding</th>
-            <th>Leeching</th>
+            <th><i class="bi bi-file-earmark-arrow-down-fill"></i></th>
+            <th><i class="bi bi-arrow-up"></i></th>
+            <th><i class="bi bi-arrow-down"></i></th>
         </tr>
         </thead>
         <tbody>
@@ -65,9 +65,9 @@
                     minute: "2-digit"
                 }) }}</td>
             <td>{{ torrent.length }}</td>
-            <td>-1</td>
-            <td>-1</td>
-            <td>-1</td>
+            <td>{{ torrent.downloads }}</td>
+            <td>{{ torrent.seeders }}</td>
+            <td>{{ torrent.leechers }}</td>
         </tr>
         {% endfor %}
         </tbody>
