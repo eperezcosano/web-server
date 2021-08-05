@@ -123,6 +123,7 @@ async function home(req, res) {
         res.seeders = server.torrents[torrent.infoHash] ? server.torrents[torrent.infoHash].complete : 0
         res.leechers = server.torrents[torrent.infoHash] ? server.torrents[torrent.infoHash].incomplete : 0
         res.owner = torrent.owner
+        return res
     })
     console.log(torrentTable)
     res.render('home', {payload: req.payload, stats, torrents})
