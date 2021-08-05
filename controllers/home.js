@@ -122,7 +122,7 @@ async function home(req, res) {
         res.length = prettyBytes(torrent.length)
         res.seeders = server.torrents[torrent.infoHash] ? server.torrents[torrent.infoHash].complete : 0
         res.leechers = server.torrents[torrent.infoHash] ? server.torrents[torrent.infoHash].incomplete : 0
-        res.owner = torrent.owner
+        res.owner = torrent.owner.uname
         return res
     })
     console.log(torrentTable)
