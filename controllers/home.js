@@ -97,9 +97,10 @@ function getStats(server) {
 
 async function home(req, res) {
     const page = req.params.page ? req.params.page : 0
+    const itemsPerPage = 1
     const totalUsers = await User.countDocuments()
     const totalTorrents = await Torrent.countDocuments()
-    const torrents = await Torrent.find().sort({createdAt: -1}).skip(page * 4).limit(4).populate('owner')
+    const torrents = await Torrent.find().sort({createdAt: -1}).skip(page * itemsPerPage).limit(itemsPerPage).populate('owner')
     const traffic = await User.aggregate([{
         $group: {
             _id: '',
@@ -133,7 +134,7 @@ async function home(req, res) {
         })
         return res
     })
-    res.render('home', {payload: req.payload, stats, torrents: torrentTable})
+    res.render('home', {payload: req.payload, stats, torrents: torrentTable, page})
 }
 
 function logout(req, res) {
