@@ -35,8 +35,7 @@ function countPeers (filterFunction, allPeers) {
     return count
 }
 
-function getStats() {
-    const server = new Tracker().getInstance().serverTracker
+function getStats(server) {
     const infoHashes = Object.keys(server.torrents)
     const hasOwnProperty = Object.prototype.hasOwnProperty
     let activeTorrents = 0
@@ -113,8 +112,15 @@ async function home(req, res) {
             }
         }
     ])
-
-    const stats = {...{totalUsers, totalTorrents, traffic: prettyBytes(traffic[0].traffic)}, ...getStats()}
+    const server = new Tracker().getInstance().serverTracker
+    const stats = {...{totalUsers, totalTorrents, traffic: prettyBytes(traffic[0].traffic)}, ...getStats(server)}
+    const torrentTable = torrents.map(torrent => {
+        torrent.downloads = Math.round(torrent.downloaded / torrent.length)
+        torrent.length = prettyBytes(torrent.length)
+        torrent.seeders = server.torrents[torrent.infoHash].complete
+        torrent.leechers = server.torrents[torrent.infoHash].incomplete
+    })
+    console.log(torrentTable)
     res.render('home', {payload: req.payload, stats, torrents})
 }
 

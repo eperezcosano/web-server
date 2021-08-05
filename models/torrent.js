@@ -18,6 +18,10 @@ const torrentSchema = new mongoose.Schema({
             type: String,
             required: false
         },
+        files: {
+            type: Number,
+            default: 0
+        },
         file: {
             type: Buffer,
             required: true
