@@ -114,13 +114,13 @@ async function home(req, res) {
     ])
     const server = new Tracker().getInstance().serverTracker
     const stats = {...{totalUsers, totalTorrents, traffic: prettyBytes(traffic[0].traffic)}, ...getStats(server)}
-    const torrentTable = torrents.map(torrent => {
+    torrents.forEach(torrent => {
         torrent.downloads = Math.round(torrent.downloaded / torrent.length)
         torrent.length = prettyBytes(torrent.length)
         torrent.seeders = server.torrents[torrent.infoHash] ? server.torrents[torrent.infoHash].complete : 0
         torrent.leechers = server.torrents[torrent.infoHash] ? server.torrents[torrent.infoHash].incomplete : 0
     })
-    console.log(torrentTable)
+    console.log(torrents)
     res.render('home', {payload: req.payload, stats, torrents})
 }
 
