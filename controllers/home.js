@@ -82,7 +82,6 @@ function getStats() {
     const isIPv6 = peer => peer.ipv6
 
     return {
-        torrents: infoHashes.length,
         activeTorrents,
         peersAll: Object.keys(allPeers).length,
         peersSeeders: countPeers(isSeeder, allPeers),
@@ -96,8 +95,8 @@ async function home(req, res) {
     const totalUsers = await User.countDocuments()
     const totalTorrents = await Torrent.countDocuments()
     const torrents = await Torrent.find()
-    console.log(getStats())
-    const stats = {totalUsers, totalTorrents}
+    const stats = {...{totalUsers, totalTorrents}, ...getStats()}
+    console.log(stats)
     res.render('home', {payload: req.payload, stats, torrents})
 }
 
