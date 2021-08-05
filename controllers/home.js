@@ -83,7 +83,7 @@ function getStats() {
 
     const peersSeeders = countPeers(isSeeder, allPeers)
     const peersLeechers = countPeers(isLeecher, allPeers)
-    const ratio = (peersSeeders === 0 && peersLeechers) ? 0 : Math.round(((peersSeeders / peersLeechers) + Number.EPSILON) * 1000) / 1000
+    const ratio = (peersSeeders === 0 && peersLeechers === 0) ? 0 : Math.round(((peersSeeders / peersLeechers) + Number.EPSILON) * 1000) / 1000
 
     return {
         activeTorrents,
