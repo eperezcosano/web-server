@@ -43,7 +43,6 @@ class PrivateTracker {
                 } else if (params.type === 'ws') {
                     const parts = params.headers.cookie.split(';')
                     token = parts.find( item => item.split('=')[0].trim() === 'k').split('=')[1]
-                    console.log('token cookie', token)
                 }
                 if (!token) {
                     return cb(new Error('Unauthorised (1)'))

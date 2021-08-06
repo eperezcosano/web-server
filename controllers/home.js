@@ -48,6 +48,7 @@ function getStats(server) {
         keys.forEach(peerId => {
             // Don't mark the peer as most recently used for stats
             const peer = peers.peek(peerId)
+            console.log(peer)
             if (peer == null) return // peers.peek() can evict the peer
 
             if (!hasOwnProperty.call(allPeers, peerId)) {
