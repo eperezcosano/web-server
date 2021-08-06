@@ -1,4 +1,7 @@
 const client = new WebTorrent()
+const infoHash = window.location.pathname.split('/')[2]
+console.log(infoHash)
+
 
 let body = document.body
 let progressBar = document.querySelector('#progressBar')
