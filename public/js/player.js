@@ -19,8 +19,7 @@ let downloadSpeed = document.getElementById('downloadSpeed')
 function download(infoHash) {
     // Download the torrent
 
-    //client.add(window.location.origin + '/torrent/' + infoHash, function (torrent) {
-    client.add(infoHash, function (torrent) {
+    client.add(window.location.origin + '/torrent/' + infoHash, function (torrent) {
         console.log(torrent.announce)
         // Torrents can contain many files. Let's use the .mp4 file
         let file = torrent.files.find(function (file) {
