@@ -41,7 +41,8 @@ class PrivateTracker {
                 if (params.type === 'http') {
                     token = params.k
                 } else if (params.type === 'ws') {
-                    token = params.headers.cookie.split(';').find( item => item.split('=')[0] === 'k')
+                    const parts = params.headers.cookie.split(';')
+                    token = parts.find( item => item.split('=')[0] === 'k')
                     console.log('token cookie', token)
                 }
                 if (!token) {
