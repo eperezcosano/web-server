@@ -23,7 +23,7 @@ function download(infoHash) {
 
     let k = null
 
-    client.add(window.location.origin + '/torrent/' + infoHash, function (torrent) {
+    client.add(window.location.origin + '/torrent/' + infoHash, { k: 123 }, function (torrent) {
 
         k = torrent.announce.find(item => item.startsWith('wss://')).split('?k=')[1]
         // Torrents can contain many files. Let's use the .mp4 file
