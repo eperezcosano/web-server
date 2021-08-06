@@ -250,6 +250,7 @@ async function addTorrent(req, res) {
         }
 
         torrent.private = true
+        //TODO: info->private 1
         torrent.announce = []
         torrent.comment = 'Private torrent from Lufo.ml'
         torrent.createdBy = req.payload.uname

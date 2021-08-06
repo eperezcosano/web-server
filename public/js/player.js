@@ -7,13 +7,14 @@ const client = new WebTorrent({
 const infoHash = window.location.pathname.split('/')[2]
 
 let body = document.body
-let progressBar = document.querySelector('#progressBar')
-let numPeers = document.querySelector('#numPeers')
-let downloaded = document.querySelector('#downloaded')
-let total = document.querySelector('#total')
-let remain = document.querySelector('#remaining')
-let uploadSpeed = document.querySelector('#uploadSpeed')
-let downloadSpeed = document.querySelector('#downloadSpeed')
+let output = document.getElementById('output')
+let progressBar = document.getElementById('progressBar')
+let numPeers = document.getElementById('numPeers')
+let downloaded = document.getElementById('downloaded')
+let total = document.getElementById('total')
+let remain = document.getElementById('remaining')
+let uploadSpeed = document.getElementById('uploadSpeed')
+let downloadSpeed = document.getElementById('downloadSpeed')
 
 function download(infoHash) {
     // Download the torrent
@@ -28,7 +29,7 @@ function download(infoHash) {
         })
 
         // Stream the file in the browser
-        file.appendTo('output')
+        file.appendTo(output)
 
         // Trigger statistics refresh
         torrent.on('done', onDone)
