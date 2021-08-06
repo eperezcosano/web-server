@@ -19,8 +19,8 @@ let downloadSpeed = document.getElementById('downloadSpeed')
 function download(infoHash) {
     // Download the torrent
 
-    client.add(window.location.origin + '/torrent/' + infoHash, function (torrent) {
-
+    //client.add(window.location.origin + '/torrent/' + infoHash, function (torrent) {
+    client.add(infoHash, function (torrent) {
         console.log(torrent.announce)
         // Torrents can contain many files. Let's use the .mp4 file
         let file = torrent.files.find(function (file) {
@@ -78,5 +78,20 @@ function prettyBytes(num) {
     unit = units[exponent]
     return (neg ? '-' : '') + num + ' ' + unit
 }
-
-download(infoHash)
+function dropHandler(e) {
+    console.log('File(s) dropped');
+    e.preventDefault();
+    if (e.dataTransfer.items) {
+        for (let i = 0; i < e.dataTransfer.items.length; i++) {
+            if (e.dataTransfer.items[i].kind === 'file') {
+                let file = e.dataTransfer.items[i].getAsFile();
+                download(file)
+            }
+        }
+    }
+}
+function dragOverHandler(e) {
+    console.log('File(s) in drop zone');
+    e.preventDefault();
+}
+//download(infoHash)
