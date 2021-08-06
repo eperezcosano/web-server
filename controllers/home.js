@@ -283,7 +283,7 @@ async function addTorrent(req, res) {
 
 async function player(req, res) {
     const infoHash = req.params.infoHash
-    res.render('home', {payload: req.payload, player: infoHash})
+    res.render('home', {payload: req.payload, view: infoHash})
 }
 
 async function downloadTorrent(req, res) {
