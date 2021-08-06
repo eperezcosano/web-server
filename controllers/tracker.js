@@ -37,6 +37,8 @@ class PrivateTracker {
                 console.log('cookie', params.headers.cookie)
                 console.log('------------------------------')
 
+                const uploaded = params.uploaded ? params.uploaded : 0
+                const downloaded = params.downloaded ? params.downloaded : 0
                 let token = null
                 if (params.type === 'http') {
                     token = params.k
@@ -56,7 +58,7 @@ class PrivateTracker {
                     const updateTorrent = await Torrent.updateOne(
                         {"infoHash": infoHash},
                         {
-                            $inc: {uploaded: params.uploaded, downloaded: params.downloaded}
+                            $inc: {uploaded, downloaded}
                         })
                     if (updateTorrent.ok !== 1) {
                         return cb(new Error('Torrent not registered (2)'))
@@ -66,7 +68,7 @@ class PrivateTracker {
                         {"_id": payload.id},
                         {
                             $set: {"clientIP": params.ip},
-                            $inc: {uploaded: params.uploaded, downloaded: params.downloaded}
+                            $inc: {uploaded, downloaded}
                         })
                     if (updateUser.ok !== 1) {
                         return cb(new Error('Unauthorised (2)'))
