@@ -48,22 +48,21 @@ function getStats(server) {
         keys.forEach(peerId => {
             // Don't mark the peer as most recently used for stats
             const peer = peers.peek(peerId)
-            console.log(peer)
             if (peer == null) return // peers.peek() can evict the peer
 
             if (!hasOwnProperty.call(allPeers, peerId)) {
                 allPeers[peerId] = {
-                    ipv4: false,
-                    ipv6: false,
                     seeder: false,
-                    leecher: false
+                    leecher: false,
+                    http: false,
+                    ws: false
                 }
             }
 
-            if (peer.ip.includes(':')) {
-                allPeers[peerId].ipv6 = true
-            } else {
-                allPeers[peerId].ipv4 = true
+            if (peer.type === 'http') {
+                allPeers[peerId].http = true
+            } else if (peer.type === 'ws') {
+                allPeers[peerId].ws = true
             }
 
             if (peer.complete) {
@@ -78,8 +77,8 @@ function getStats(server) {
 
     const isSeeder = peer => peer.seeder === true
     const isLeecher = peer => peer.leecher === true
-    const isIPv4 = peer => peer.ipv4
-    const isIPv6 = peer => peer.ipv6
+    const isHTTP = peer => peer.http === true
+    const isWS = peer => peer.ws === true
 
     const peersSeeders = countPeers(isSeeder, allPeers)
     const peersLeechers = countPeers(isLeecher, allPeers)
@@ -91,9 +90,10 @@ function getStats(server) {
         peersSeeders,
         peersLeechers,
         ratio,
-        peersIPv4: countPeers(isIPv4, allPeers),
-        peersIPv6: countPeers(isIPv6, allPeers),
+        peersHTTP: countPeers(isHTTP, allPeers),
+        peersWS: countPeers(isWS, allPeers)
     }
+
 }
 
 async function home(req, res) {
@@ -117,6 +117,7 @@ async function home(req, res) {
     ])
     const server = new Tracker().getInstance().serverTracker
     const stats = {...{totalUsers, totalTorrents, traffic: prettyBytes(traffic[0].traffic)}, ...getStats(server)}
+    console.log(stats)
     const torrentTable = torrents.map(torrent => {
         let res = {}
         res.infoHash = torrent.infoHash
