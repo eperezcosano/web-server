@@ -43,7 +43,7 @@ class PrivateTracker {
                 }
                 try {
                     const payload = jwt.verify(token, trackerSecret)
-
+                    console.log(payload)
                     if (payload.torrent !== infoHash) {
                         return cb(new Error('Torrent not registered (1)'))
                     }
