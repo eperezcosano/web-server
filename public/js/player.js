@@ -78,20 +78,5 @@ function prettyBytes(num) {
     unit = units[exponent]
     return (neg ? '-' : '') + num + ' ' + unit
 }
-function dropHandler(e) {
-    console.log('File(s) dropped');
-    e.preventDefault();
-    if (e.dataTransfer.items) {
-        for (let i = 0; i < e.dataTransfer.items.length; i++) {
-            if (e.dataTransfer.items[i].kind === 'file') {
-                let file = e.dataTransfer.items[i].getAsFile();
-                download(file)
-            }
-        }
-    }
-}
-function dragOverHandler(e) {
-    console.log('File(s) in drop zone');
-    e.preventDefault();
-}
-//download(infoHash)
+
+download(infoHash)
