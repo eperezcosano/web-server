@@ -25,6 +25,7 @@ class PrivateTracker {
             udp: false,
             ws: true,
             filter: async function (infoHash, params, cb) {
+                console.log(params)
                 /*
                 console.log('------------------------------')
                 console.log('addr', params.addr)
