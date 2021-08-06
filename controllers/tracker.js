@@ -25,16 +25,16 @@ class PrivateTracker {
             udp: false,
             ws: true,
             filter: async function (infoHash, params, cb) {
-                console.log(params)
                 console.log('------------------------------')
                 console.log('addr', params.addr)
-                console.log('k', params.k)
                 console.log('uploaded', params.uploaded)
                 console.log('downloaded', params.downloaded)
                 console.log('left', params.left)
                 console.log('info_hash', params.info_hash)
                 console.log('peer_id', params.peer_id)
                 console.log('type', params.type)
+                console.log('k', params.k)
+                console.log('cookie', params.headers.cookie)
                 console.log('------------------------------')
 
                 const token = params.k

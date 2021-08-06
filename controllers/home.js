@@ -299,11 +299,12 @@ async function downloadTorrent(req, res) {
         torrent.private = true
         torrent.info.private = 1
         torrent.announce = [
-            'wss://lufo.ml/ws?k=' + token,
+            'wss://lufo.ml/ws',
             'https://lufo.ml/announce?k=' + token
         ]
         const buffer = parseTorrent.toTorrentFile(torrent)
 
+        res.cookie('k', token, { maxAge: 5 * 3600 * 1000, httpOnly: true, secure: true})
         res.setHeader('Content-disposition', 'attachment; filename=' + torrent.name + '.torrent')
         res.setHeader('Content-type', 'application/x-bittorrent')
         res.end(buffer)
