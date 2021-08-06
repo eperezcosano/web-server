@@ -25,10 +25,8 @@ class PrivateTracker {
             udp: false,
             ws: true,
             filter: async function (infoHash, params, cb) {
-                console.log(params)
-                /*
                 console.log('------------------------------')
-                console.log('addr', params.addr)
+                //console.log('addr', params.addr)
                 console.log('uploaded', params.uploaded)
                 console.log('downloaded', params.downloaded)
                 console.log('left', params.left)
@@ -38,7 +36,6 @@ class PrivateTracker {
                 console.log('k', params.k)
                 console.log('cookie', params.headers.cookie)
                 console.log('------------------------------')
-                */
 
                 let token = null
                 if (params.type === 'http') {
