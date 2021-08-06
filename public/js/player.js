@@ -1,5 +1,7 @@
 const client = new WebTorrent({
-    tracker: true,
+    tracker: {
+        k: 123
+    },
     dht: false,
     lsd: false,
     webSeeds: false
@@ -67,9 +69,6 @@ function download(infoHash) {
             body.className += ' is-seed'
             onProgress()
         }
-    })
-    client.update({
-        k: k
     })
 }
 
