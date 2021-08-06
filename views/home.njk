@@ -3,6 +3,7 @@
 {% from 'profile.njk' import profile %}
 {% import 'addtorrent.njk' as addtorrent %}
 {% import 'panels.njk' as panels %}
+{% from 'player.njk' import player %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,6 +26,8 @@
             {{ addtorrent.download(add) }}
         {% elseif add and add === true %}
             {{ addtorrent.form(add) }}
+        {% elseif view %}
+            {{ view() }}
         {% else %}
             <div class="row">
                 <div class="col-3">
@@ -38,5 +41,10 @@
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+{% if view %}
+    <script src="https://cdn.jsdelivr.net/npm/webtorrent@latest/webtorrent.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@latest/moment.min.js"></script>
+    <script src="/js/player.js"></script>
+{% endif %}
 </body>
 </html>

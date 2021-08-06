@@ -265,6 +265,7 @@ async function addTorrent(req, res) {
             name: torrent.name,
             title: title,
             description: desc,
+            files: torrent.files.length,
             file: buffer,
             length: torrent.length,
             owner: req.payload.id
@@ -278,6 +279,11 @@ async function addTorrent(req, res) {
         console.error(err)
         return res.status(500).render('home', { payload: req.payload, add: true, alert: { type: 'warning', msg: 'Internal error. Please try again later...'} })
     }
+}
+
+async function player(req, res) {
+    const infoHash = req.params.infoHash
+    res.render('home', {payload: req.payload, player: infoHash})
 }
 
 async function downloadTorrent(req, res) {
@@ -311,5 +317,6 @@ module.exports = {
     invite,
     addTorrentPage,
     addTorrent,
-    downloadTorrent
+    downloadTorrent,
+    player
 }

@@ -131,4 +131,19 @@ router.get('/torrent/:infoHash',
     homeController.downloadTorrent
 )
 
+// View
+router.get('/view/:infoHash',
+    limiter,
+    auth.verifyToken,
+    [
+        param('infoHash')
+            .isLength({min: 40, max: 40})
+            .withMessage('Invalid hash length.')
+            .isHexadecimal()
+            .withMessage('Invalid hash.')
+    ],
+    validator.home,
+    homeController.player
+)
+
 module.exports = router;
