@@ -299,7 +299,7 @@ async function downloadTorrent(req, res) {
         const token = jwt.sign({ id: req.payload.id, torrent: torrent.infoHash }, trackerSecret)
         //torrent.private = true
         torrent.info.private = 1
-        console.log(torrent.info)
+        console.log(torrent)
         torrent.announce = ['http://lufo.ml:8000/announce?k=' + token] //, 'ws://lufo.ml:8000']
         const buffer = parseTorrent.toTorrentFile(torrent)
 
