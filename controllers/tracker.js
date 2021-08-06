@@ -21,7 +21,7 @@ class PrivateTracker {
             http: true,
             interval: 60000,
             stats: false,
-            trustProxy: false,
+            trustProxy: true,
             udp: false,
             ws: true,
             filter: async function (infoHash, params, cb) {
