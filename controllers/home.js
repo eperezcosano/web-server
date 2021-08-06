@@ -117,7 +117,6 @@ async function home(req, res) {
     ])
     const server = new Tracker().getInstance().serverTracker
     const stats = {...{totalUsers, totalTorrents, traffic: prettyBytes(traffic[0].traffic)}, ...getStats(server)}
-    console.log(stats)
     const torrentTable = torrents.map(torrent => {
         let res = {}
         res.infoHash = torrent.infoHash
@@ -155,6 +154,7 @@ function prettyBytes(num) {
 }
 
 async function userProfile(req, res) {
+    //TODO: table of torrents
     try {
         const user = await User.findOne({"uname": req.params.uname})
         if (user) {
