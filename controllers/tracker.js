@@ -11,9 +11,9 @@ class PrivateTracker {
 
     trackerPort = 8000
     hostname = {
-        http: '::',
-        udp4: '0.0.0.0',
-        udp6: '::'
+        http: 'localhost',
+        udp4: '127.0.0.1',
+        udp6: '::1'
     }
 
     constructor() {

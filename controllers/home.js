@@ -298,8 +298,10 @@ async function downloadTorrent(req, res) {
         const token = jwt.sign({ id: req.payload.id, torrent: torrent.infoHash }, trackerSecret)
         torrent.private = true
         torrent.info.private = 1
-        //torrent.announce = ['http://lufo.ml:8000/announce?k=' + token, 'ws://lufo.ml:8000/?k=' + token]
-        torrent.announce = ['wss://lufo.ml/tracker/?k=' + token]
+        torrent.announce = [
+            'https://lufo.ml/announce?k=' + token,
+            'wss://lufo.ml/ws?k=' + token
+        ]
         const buffer = parseTorrent.toTorrentFile(torrent)
 
         res.setHeader('Content-disposition', 'attachment; filename=' + torrent.name + '.torrent')
