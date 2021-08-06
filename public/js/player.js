@@ -1,9 +1,9 @@
-const client = new WebTorrent(/*{
+const client = new WebTorrent({
     tracker: true,
     dht: false,
     lsd: false,
     webSeeds: false
-}*/)
+})
 const infoHash = window.location.pathname.split('/')[2]
 
 let body = document.body
