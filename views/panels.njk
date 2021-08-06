@@ -61,7 +61,7 @@
         {% for torrent in torrents %}
         <tr>
             <th scope='row'>{{ loop.index + ((page - 1) * items) }}</th>
-            <td><a href="/torrent/{{ torrent.infoHash }}" >{{ torrent.name }}</a></td>
+            <td><a href="/view/{{ torrent.infoHash }}" >{{ torrent.name }}</a></td>
             <td>{{ torrent.date }}</td>
             <td>{{ torrent.length }}</td>
             <td>{{ torrent.files }}</td>
