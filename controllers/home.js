@@ -299,7 +299,7 @@ async function downloadTorrent(req, res) {
         torrent.private = true
         torrent.info.private = 1
         //torrent.announce = ['http://lufo.ml:8000/announce?k=' + token, 'ws://lufo.ml:8000/?k=' + token]
-        torrent.announce = ['ws://79.143.185.203:8000/?k=' + token]
+        torrent.announce = ['wss://lufo.ml/tracker/?k=' + token]
         const buffer = parseTorrent.toTorrentFile(torrent)
 
         res.setHeader('Content-disposition', 'attachment; filename=' + torrent.name + '.torrent')
