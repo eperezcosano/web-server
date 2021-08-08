@@ -10,7 +10,7 @@ const infoHash = window.location.pathname.split('/')[2]
 
 let body = document.body
 let parent = document.getElementsByClassName('card')[0]
-let output = document.getElementById('output')
+let output = document.getElementsByClassName('card-header')[0]
 let progressBar = document.getElementById('progressBar')
 let numPeers = document.getElementById('numPeers')
 let downloaded = document.getElementById('downloaded')
@@ -31,8 +31,9 @@ function download(infoHash) {
         })
 
         // Stream the file in the browser
-
-        file.getBlob(function (err, url) {
+        file.appendTo(output)
+        /*
+        file.getBlobURL(function (err, url) {
             if (err) throw err
             let video = document.createElement('video')
             video.className = 'card-img-top'
@@ -40,7 +41,7 @@ function download(infoHash) {
             //video.autoplay = true
             video.src = url
             parent.prepend(video)
-        })
+        })*/
 
 
         // Trigger statistics refresh
