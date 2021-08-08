@@ -31,25 +31,16 @@ function download(infoHash) {
         })
 
         // Stream the file in the browser
-        file.getBlobURL(function (err, url) {
-            if (err) throw err
-            var a = document.createElement('a')
-            a.download = file.name
-            a.href = url
-            a.textContent = 'Download ' + file.name
-            document.body.appendChild(a)
-            a.click()
-        })
-        /*
+
         file.getBlobURL(function (err, url) {
             if (err) throw err
             let video = document.createElement('video')
             video.className = 'card-img-top'
             video.controls = true
             //video.autoplay = true
-            video.src = torrent.torrentFileBlobURL.split('blob:')[1]
+            video.src = url
             parent.prepend(video)
-        })*/
+        })
 
 
         // Trigger statistics refresh
