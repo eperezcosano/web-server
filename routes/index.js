@@ -146,4 +146,7 @@ router.get('/view/:infoHash',
     homeController.player
 )
 
+// Hybrid token
+router.get('/hybrid', limiter, auth.verifyToken, homeController.hybridToken)
+
 module.exports = router;

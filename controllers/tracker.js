@@ -44,14 +44,16 @@ class PrivateTracker {
                     token = params.k
                 } else if (params.type === 'ws') {
                     const parts = params.headers.cookie.split(';')
-                    token = parts.find( item => item.split('=')[0].trim() === 'k').split('=')[1]
+                    const k = parts.find( item => item.split('=')[0].trim() === 'k')
+                    if (!k) {return cb(new Error('Unauthorised (K)'))}
+                    token = k.split('=')[1]
                 }
                 if (!token) {
                     return cb(new Error('Unauthorised (1)'))
                 }
                 try {
                     const payload = jwt.verify(token, trackerSecret)
-                    if (payload.torrent !== infoHash) {
+                    if (payload.torrent !== 'hybrid' && payload.torrent !== infoHash) {
                         return cb(new Error('Torrent not registered (1)'))
                     }
 

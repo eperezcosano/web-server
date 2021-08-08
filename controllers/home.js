@@ -317,6 +317,11 @@ async function downloadTorrent(req, res) {
     }
 }
 
+function hybridToken(req, res) {
+    const token = jwt.sign({ id: req.payload.id, torrent: 'hybrid' }, trackerSecret)
+    res.json(token)
+}
+
 module.exports = {
     home,
     logout,
@@ -325,5 +330,6 @@ module.exports = {
     addTorrentPage,
     addTorrent,
     downloadTorrent,
-    player
+    player,
+    hybridToken
 }
