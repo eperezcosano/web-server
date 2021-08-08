@@ -16,6 +16,7 @@ body.is-seed .show-leech {
 .show-seed {
     display: none;
 }
+/*
 #status {
     color: #fff;
     font-size: 17px;
@@ -28,8 +29,6 @@ body.is-seed .show-leech {
     margin-right: 3px;
     border-bottom: 1px dashed rgba(255,255,255,0.3);
 }
-
-/*
 .is-seed #hero {
     background-color: #154820;
     transition: .5s .5s background-color ease-in-out;
