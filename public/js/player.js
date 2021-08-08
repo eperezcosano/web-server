@@ -33,7 +33,7 @@ function download(infoHash) {
         // Stream the file in the browser
         let video = document.createElement('video')
         video.className = 'card-img-top'
-        //video.controls = true
+        video.controls = true
         //video.autoplay = true
         video.src = torrent.torrentFileBlobURL
         parent.prepend(video)
