@@ -9,6 +9,7 @@ const client = new WebTorrent({
 const infoHash = window.location.pathname.split('/')[2]
 
 let body = document.body
+let parent = document.getElementsByClassName('card')[0]
 let output = document.getElementById('output')
 let progressBar = document.getElementById('progressBar')
 let numPeers = document.getElementById('numPeers')
@@ -30,7 +31,12 @@ function download(infoHash) {
         })
 
         // Stream the file in the browser
-        file.appendTo(output)
+        let video = document.createElement('video')
+        video.className = 'card-img-top'
+        video.controls = true
+        video.autoplay = true
+        video.src = file
+        parent.prepend(video)
 
         // Trigger statistics refresh
         torrent.on('done', onDone)
