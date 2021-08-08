@@ -32,7 +32,7 @@ function download(infoHash) {
 
         // Stream the file in the browser
 
-        /*file.getBlobURL(function (err, url) {
+        file.getBlob(function (err, url) {
             if (err) throw err
             let video = document.createElement('video')
             video.className = 'card-img-top'
@@ -40,8 +40,7 @@ function download(infoHash) {
             //video.autoplay = true
             video.src = url
             parent.prepend(video)
-        })*/
-        file.appendTo(parent)
+        })
 
 
         // Trigger statistics refresh
