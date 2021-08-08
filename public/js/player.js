@@ -35,7 +35,7 @@ function download(infoHash) {
         video.className = 'card-img-top'
         video.controls = true
         video.autoplay = true
-        video.src = file
+        video.src = torrent.torrentFileBlobURL
         parent.prepend(video)
 
         // Trigger statistics refresh
