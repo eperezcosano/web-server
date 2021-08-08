@@ -41,7 +41,7 @@ function download(infoHash) {
             video.src = url
             parent.prepend(video)
         })*/
-        file.appentTo(parent)
+        file.appendTo(parent)
 
 
         // Trigger statistics refresh
