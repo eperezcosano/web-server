@@ -285,7 +285,11 @@ async function addTorrent(req, res) {
 
 async function player(req, res) {
     const infoHash = req.params.infoHash
-    res.render('home', {payload: req.payload, view: infoHash})
+    const doc = await Torrent.findOne({"infoHash": infoHash})
+    if (!doc) {
+        return res.render('home', { payload: req.payload, alert: { type: 'error', msg: 'Torrent not found' }})
+    }
+    res.render('home', {payload: req.payload, view: torrent})
 }
 
 async function downloadTorrent(req, res) {
@@ -306,7 +310,7 @@ async function downloadTorrent(req, res) {
         ]
         const buffer = parseTorrent.toTorrentFile(torrent)
 
-        res.cookie('k', token, { maxAge: 5 * 3600 * 1000, httpOnly: true, secure: true})
+        res.cookie('k', token, { maxAge: 8 * 3600 * 1000, httpOnly: true, secure: true})
         res.setHeader('Content-disposition', 'attachment; filename=' + torrent.name + '.torrent')
         res.setHeader('Content-type', 'application/x-bittorrent')
         res.end(buffer)

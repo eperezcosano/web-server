@@ -27,7 +27,7 @@
         {% elseif add and add === true %}
             {{ addtorrent.form(add) }}
         {% elseif view %}
-            {{ player() }}
+            {{ player(torrent) }}
         {% else %}
             <div class="row">
                 <div class="col-3">
