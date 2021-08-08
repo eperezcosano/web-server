@@ -285,8 +285,8 @@ async function addTorrent(req, res) {
 
 async function player(req, res) {
     const infoHash = req.params.infoHash
-    const doc = await Torrent.findOne({"infoHash": infoHash})
-    if (!doc) {
+    const torrent = await Torrent.findOne({"infoHash": infoHash})
+    if (!torrent) {
         return res.render('home', { payload: req.payload, alert: { type: 'error', msg: 'Torrent not found' }})
     }
     res.render('home', {payload: req.payload, view: torrent})
