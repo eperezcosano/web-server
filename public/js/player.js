@@ -25,10 +25,7 @@ function download(infoHash) {
     client.add(window.location.origin + '/torrent/' + infoHash, function (torrent) {
 
         // Torrents can contain many files. Let's use the .mp4 file
-        let file = torrent.files.find(function (file) {
-            console.log(file)
-            return file.name.endsWith('.mp4')
-        })
+        let file = torrent.files.find(file => file.name.endsWith('.mp4') || file.name.endsWith('.mp3'))
 
         // Stream the file in the browser
         file.appendTo(output)
