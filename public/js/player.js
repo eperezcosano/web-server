@@ -10,7 +10,7 @@ const infoHash = window.location.pathname.split('/')[2]
 
 let body = document.body
 let parent = document.getElementsByClassName('card')[0]
-let output = document.getElementsByClassName('card-header')[0]
+let output = document.getElementById('output')
 let progressBar = document.getElementById('progressBar')
 let numPeers = document.getElementById('numPeers')
 let downloaded = document.getElementById('downloaded')
