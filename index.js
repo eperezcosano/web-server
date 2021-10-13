@@ -4,7 +4,8 @@ const nunjucks = require('nunjucks')
 const mongoose = require('mongoose')
 const cookieParser = require('cookie-parser')
 const Tracker = require('./controllers/tracker')
-const MONGO_URI = 'mongodb://localhost/web-server'
+const {db_usr, db_pwd, db_host, db_port, db} = require('./config')
+const MONGO_URI = 'mongodb://'+db_usr+':'+db_pwd+'@'+db_host+':'+db_port+'/'+db+'?authSource=admin'
 const port = 3000
 
 const app = express()
@@ -24,6 +25,7 @@ mongoose.connect(MONGO_URI,
     {
         useNewUrlParser: true,
         useUnifiedTopology: true,
+        useFindAndModify: false,
         useCreateIndex: true
     })
     .then(() => {
